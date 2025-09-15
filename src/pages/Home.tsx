@@ -287,7 +287,7 @@ const Home: React.FC<HomeProps> = () => {
                 {/* View All Reviews Button */}
                 <button
                   onClick={() => handleNavigation('/reviews')}
-                  className="group flex items-center space-x-2 px-3 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-md"
+                  className="group flex items-center space-x-2 px-1 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-md"
                   title="View all reviews"
                 >
                   <span className="text-sm font-medium">View All</span>
