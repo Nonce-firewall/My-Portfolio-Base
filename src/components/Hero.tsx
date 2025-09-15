@@ -72,7 +72,7 @@ const Hero: React.FC<HeroProps> = () => {
   </button>
   <button
     onClick={() => navigate('/contact')}
-    className="py-2 px-4 border border-solid border-blue-700 text-blue-900 hover:bg-blue-500 hover:text-white transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
+    className="py-2 px-4 bg-blue-700 text-white hover:bg-indigo-700 hover:text-white transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
   >
     Get In Touch
   </button>
