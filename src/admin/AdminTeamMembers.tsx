@@ -16,6 +16,7 @@ const AdminTeamMembers: React.FC = () => {
     twitter_url: '',
     linkedin_url: '',
     github_url: '',
+    whatsapp_url: '',
     display_order: 0,
     active: true
   })
@@ -72,6 +73,7 @@ const AdminTeamMembers: React.FC = () => {
       twitter_url: member.twitter_url || '',
       linkedin_url: member.linkedin_url || '',
       github_url: member.github_url || '',
+      whatsapp_url: member.whatsapp_url || '',
       display_order: member.display_order || 0,
       active: member.active ?? true
     })
@@ -129,6 +131,7 @@ const AdminTeamMembers: React.FC = () => {
       twitter_url: '',
       linkedin_url: '',
       github_url: '',
+      whatsapp_url: '',
       display_order: 0,
       active: true
     })
@@ -259,6 +262,19 @@ const AdminTeamMembers: React.FC = () => {
                     className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    WhatsApp URL
+                  </label>
+                  <input
+                    type="url"
+                    name="whatsapp_url"
+                    value={formData.whatsapp_url}
+                    onChange={handleChange}
+                    placeholder="https://wa.me/1234567890"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -350,6 +366,9 @@ const AdminTeamMembers: React.FC = () => {
                     )}
                     {member.github_url && (
                       <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">GitHub</span>
+                    )}
+                    {member.whatsapp_url && (
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">WhatsApp</span>
                     )}
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Github, Linkedin, Twitter } from 'lucide-react' // Whatsapp removed
+import { Github, Linkedin, Twitter } from 'lucide-react'
 import { SiWhatsapp } from 'react-icons/si' // New import for the correct icon
 import type { TeamMember } from '../types'
 
@@ -9,9 +9,6 @@ interface TeamMemberCardProps {
 }
 
 const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = 'full' }) => {
-  // TODO: Add your WhatsApp phone number here (including country code)
-  const whatsappUrl = 'https://wa.me/2349037044387'; // Replace with your number
-
   const getCardAccentColor = (name: string) => {
     const colors = [
       'border-t-blue-500 bg-gradient-to-b from-blue-50 to-white',
@@ -109,16 +106,18 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = '
           </a>
         )}
         
-        {/* WhatsApp Link using react-icons */}
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center text-green-700 hover:from-green-200 hover:to-green-300 transition-all duration-300 transform hover:scale-110 hover:shadow-lg ${socialSize}`}
-          title="Contact on WhatsApp"
-        >
-          <SiWhatsapp size={socialIconSize} />
-        </a>
+        {/* WhatsApp Link - only show if URL is provided */}
+        {teamMember.whatsapp_url && (
+          <a
+            href={teamMember.whatsapp_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center text-green-700 hover:from-green-200 hover:to-green-300 transition-all duration-300 transform hover:scale-110 hover:shadow-lg ${socialSize}`}
+            title={`${teamMember.name} on WhatsApp`}
+          >
+            <SiWhatsapp size={socialIconSize} />
+          </a>
+        )}
 
         {teamMember.linkedin_url && (
           <a
