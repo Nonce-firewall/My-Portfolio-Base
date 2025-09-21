@@ -10,7 +10,7 @@ interface TeamMemberCardProps {
 
 const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = 'full' }) => {
   // TODO: Add your WhatsApp phone number here (including country code)
-  const whatsappUrl = 'https://wa.me/2348100000000'; // Replace with your number
+  const whatsappUrl = 'https://wa.me/2349037044387'; // Replace with your number
 
   const getCardAccentColor = (name: string) => {
     const colors = [
