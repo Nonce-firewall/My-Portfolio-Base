@@ -98,6 +98,7 @@ export interface TeamMember {
   twitter_url?: string;
   linkedin_url?: string;
   github_url?: string;
+  whatsapp_url?: string;
   display_order?: number;
   active?: boolean;
   created_at: string;
