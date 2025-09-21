@@ -1,5 +1,5 @@
 import React from 'react'
-import { Github, Linkedin, Twitter } from 'lucide-react'
+import { Github, Linkedin, Twitter, Whatsapp } from 'lucide-react' // Changed
 import type { TeamMember } from '../types'
 
 interface TeamMemberCardProps {
@@ -8,6 +8,9 @@ interface TeamMemberCardProps {
 }
 
 const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = 'full' }) => {
+  // TODO: Add your WhatsApp phone number here (including country code)
+  const whatsappUrl = 'https://wa.me/2348100000000'; // Replace with your number
+
   const getCardAccentColor = (name: string) => {
     const colors = [
       'border-t-blue-500 bg-gradient-to-b from-blue-50 to-white',
@@ -90,7 +93,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = '
           {teamMember.bio}
         </p>
       )}
-      
+  
       {/* Social Links */}
       <div className={`flex justify-center ${variant === 'compact' ? 'space-x-2 sm:space-x-3' : 'space-x-4'}`}>
         {teamMember.twitter_url && (
@@ -104,6 +107,18 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = '
             <Twitter size={socialIconSize} />
           </a>
         )}
+        
+        {/* New WhatsApp Link */}
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center text-green-700 hover:from-green-200 hover:to-green-300 transition-all duration-300 transform hover:scale-110 hover:shadow-lg ${socialSize}`}
+          title="Contact on WhatsApp"
+        >
+          <Whatsapp size={socialIconSize} />
+        </a>
+
         {teamMember.linkedin_url && (
           <a
             href={teamMember.linkedin_url}
