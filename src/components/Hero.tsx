@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowDown, Github, Linkedin, Twitter } from 'lucide-react'
+import { ArrowDown } from 'lucide-react'
 import { useTypingAnimation } from '../hooks/useTypingAnimation'
 
 // Lazy load non-critical components
@@ -30,6 +30,7 @@ const Hero: React.FC<HeroProps> = () => {
       fetchSettings()
     })
     
+  
     return () => {
       unsubscribeFromTable('site_settings')
     }
@@ -64,21 +65,22 @@ const Hero: React.FC<HeroProps> = () => {
           </div>
 
           <div className="flex flex-row sm:flex-row gap-4 justify-center items-center">
-  <button
-    onClick={() => navigate('/projects')}
-    className="py-2 px-4 bg-indigo-600 text-white hover:bg-gray-800 transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
-  >
-    View My Work
-  </button>
-  <button
-    onClick={() => navigate('/contact')}
-    className="py-2 px-4 bg-blue-600 text-white hover:bg-orange-700 hover:text-white transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
-  >
-    Get In Touch
-  </button>
-</div>
+            <button
+              onClick={() => navigate('/projects')}
+              className="py-2 px-4 bg-indigo-600 text-white hover:bg-gray-800 transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
+            >
+              View My Work
+            </button>
+            <button
+              onClick={() => navigate('/contact')}
+              className="py-2 px-4 bg-blue-600 text-white hover:bg-orange-700 hover:text-white transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
+            >
+              Get In Touch
+            </button>
+          </div>
 
           {/* Social Links */}
+          {/*
           <div className="flex justify-center space-x-6 animate-slide-up" style={{ animationDelay: '0.8s' }}>
             {settings?.github_url && (
               <a
@@ -153,6 +155,7 @@ const Hero: React.FC<HeroProps> = () => {
               </a>
             )}
           </div>
+          */}
 
           {/* Stats */}
           {settings && (
