@@ -31,7 +31,7 @@ const Home: React.FC<HomeProps> = () => {
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   // Video URL from Supabase Storage
-  const explainerVideoUrl = "https://cxhspurcxgcseikfwnpm.supabase.co/storage/v1/object/public/new-images-bucket/projects20250922010222897.mp4";
+  const explainerVideoUrl = "https://cxhspurcxgcseikfwnpm.supabase.co/storage/v1/object/public/new-images-bucket/projects_20250922_010222897.mp4";
 
   const handleNavigation = (path: string) => {
     navigate(path)
