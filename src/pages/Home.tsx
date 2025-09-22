@@ -249,9 +249,9 @@ const Home: React.FC<HomeProps> = () => {
       <section ref={videoSectionRef} className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Watch How We Work</h2>
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global.</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              See our process in action. We combine creativity with technology to deliver outstanding results, from initial concept to final deployment.
+              An affordable website with prompt delivery to help boost your online presence and increase global reach!
             </p>
           </div>
           <div className="max-w-4xl mx-auto">
