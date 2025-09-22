@@ -256,7 +256,7 @@ const Home: React.FC<HomeProps> = () => {
           </div>
           <div className="max-w-4xl mx-auto">
             {/* The video container with responsive aspect ratio and styling */}
-            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-gray-900/10">
+            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-1 ring-gray-900/10">
               <video
                 ref={videoRef}
                 src={explainerVideoUrl}
