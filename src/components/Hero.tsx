@@ -14,7 +14,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = () => {
   const [settings, setSettings] = useState<SiteSettings | null>(null)
-  const roles = ['Front-end Developer', 'Full-Stack Developer', 'Prototype Designer']
+  const roles = ['Front-end Developer', 'Full-Stack Developer', 'UI|UX Designer']
   const currentRole = useTypingAnimation(roles, 70, 50, 1500)
   const navigate = useNavigate()
 
