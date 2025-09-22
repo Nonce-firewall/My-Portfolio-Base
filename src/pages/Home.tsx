@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, ArrowRight, Mail, MessageCircle, Clock } from 'lucide-react'
 import Hero from '../components/Hero'
@@ -24,6 +24,14 @@ const Home: React.FC<HomeProps> = () => {
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [isTeamTransitioning, setIsTeamTransitioning] = useState(true)
   const navigate = useNavigate()
+
+  // Refs and state for the explainer video
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoSectionRef = useRef<HTMLDivElement>(null);
+  const [isIntersecting, setIsIntersecting] = useState(false);
+
+  // Video URL from Supabase Storage
+  const explainerVideoUrl = "https://cxhspurcxgcseikfwnpm.supabase.co/storage/v1/object/public/new-images-bucket/projects20250922010222897.mp4";
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -101,6 +109,41 @@ const Home: React.FC<HomeProps> = () => {
       cleanup()
     }
   }, [])
+
+  // Observer for the video section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+      },
+      { threshold: 0.5 } // Trigger when 50% of the video is visible
+    );
+
+    const currentVideoSection = videoSectionRef.current;
+    if (currentVideoSection) {
+      observer.observe(currentVideoSection);
+    }
+
+    return () => {
+      if (currentVideoSection) {
+        observer.unobserve(currentVideoSection);
+      }
+    };
+  }, []);
+
+  // Effect to play/pause video based on visibility
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isIntersecting) {
+        videoRef.current.play().catch(error => {
+          // Autoplay was prevented.
+          console.error("Video autoplay was prevented:", error);
+        });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isIntersecting]);
 
   // Memoize display arrays to prevent unnecessary re-creation
   const displayReviews = useMemo(() => {
@@ -183,7 +226,8 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">About</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {settings?.about_text || 'Passionate full-stack developer with expertise in modern web technologies. I create scalable, user-friendly applications that solve real-world problems and deliver exceptional user experiences.'}
+              {settings?.about_text ||
+ 'Passionate full-stack developer with expertise in modern web technologies. I create scalable, user-friendly applications that solve real-world problems and deliver exceptional user experiences.'}
             </p>
             <div className="mt-8">
               <button
@@ -201,8 +245,35 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </section>
 
+      {/* ===== NEW: Explainer Video Section ===== */}
+      <section ref={videoSectionRef} className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Watch How We Work</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              See our process in action. We combine creativity with technology to deliver outstanding results, from initial concept to final deployment.
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            {/* The video container with responsive aspect ratio and styling */}
+            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-gray-900/10">
+              <video
+                ref={videoRef}
+                src={explainerVideoUrl}
+                muted         // Muted is essential for autoplay in modern browsers
+                loop          // The video will loop continuously
+                playsInline   // Ensures video plays inline on iOS
+                className="w-full h-full object-cover"
+                preload="metadata" // Helps load the first frame faster
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* ===== END: Explainer Video Section ===== */}
+
       {/* Featured Projects */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white"> {/* Changed to white for better visual separation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Featured Projects</h2>
@@ -240,7 +311,7 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* Reviews Section */}
       {displayReviews && displayReviews.length > 0 && (
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-gray-50"> {/* Changed to gray for better visual separation */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Testimonials</h2>
@@ -278,7 +349,8 @@ const Home: React.FC<HomeProps> = () => {
                       setCurrentReviewIndex(reviewIndex)
                     }}
                     className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                      reviewIndex === currentReviewIndex || (currentReviewIndex === reviews.length && reviewIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
+                      reviewIndex === currentReviewIndex ||
+ (currentReviewIndex === reviews.length && reviewIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   />
                 ))}
@@ -346,7 +418,8 @@ const Home: React.FC<HomeProps> = () => {
                       setCurrentTeamIndex(memberIndex)
                     }}
                     className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                      memberIndex === currentTeamIndex || (currentTeamIndex === teamMembers.length && memberIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
+                      memberIndex === currentTeamIndex ||
+ (currentTeamIndex === teamMembers.length && memberIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   />
                 ))}
