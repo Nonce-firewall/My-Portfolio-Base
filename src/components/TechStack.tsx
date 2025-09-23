@@ -27,7 +27,7 @@ const logos: TechLogo[] = [
 
 const TechStack: React.FC = () => {
   return (
-    <section className="py-12 bg-gray-50 -mt-16 sm:-mt-20 md:-mt-24 z-10 relative">
+    <section className="py-12 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 -mt-16 sm:-mt-20 md:-mt-24 z-10 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <TechStackMarquee logos={logos} speed="normal" />
       </div>
