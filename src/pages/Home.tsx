@@ -203,7 +203,7 @@ const Home: React.FC<HomeProps> = () => {
       </section>
 
       {/* Explainer Video Section */}
-      <section ref={videoSectionRef} className="py-20 bg-fuchsia-50">
+      <section ref={videoSectionRef} className="py-20 bg-fuchsia-50 rounded-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global.</h2>
@@ -263,7 +263,7 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* Reviews Section */}
       {displayReviews && displayReviews.length > 0 && (
-        <section className="py-20 bg-fuchsia-50">
+        <section className="py-20 bg-fuchsia-50 rounded-2xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Testimonials</h2>
@@ -372,7 +372,7 @@ const Home: React.FC<HomeProps> = () => {
       )}
 
       {/* Contact Section */}
-      <section className="py-20 bg-fuchsia-50">
+      <section className="py-20 bg-fuchsia-50 rounded-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Ready To Launch?</h2>
