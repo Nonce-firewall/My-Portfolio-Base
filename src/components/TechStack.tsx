@@ -19,6 +19,10 @@ const logos: TechLogo[] = [
   { src: '/tech-logos/wordpress.webp', alt: 'WordPress Logo', name: 'WordPress' },
   { src: '/tech-logos/figma.webp', alt: 'Figma Logo', name: 'Figma' },
   { src: '/tech-logos/motion.webp', alt: 'Framer Motion Logo', name: 'Framer Motion' },
+  { src: '/tech-logos/html.webp', alt: 'HTML Logo', name: 'HTML' },
+  { src: '/tech-logos/javascript.webp', alt: 'JavaScript Logo', name: 'JavaScript' },
+  { src: '/tech-logos/github.webp', alt: 'Github Logo', name: 'Github' },
+  { src: '/tech-logos/git.webp', alt: 'Git Logo', name: 'Git' }
 ]
 
 const TechStack: React.FC = () => {
