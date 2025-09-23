@@ -203,7 +203,7 @@ const Home: React.FC<HomeProps> = () => {
       </section>
 
       {/* Explainer Video Section */}
-      <section ref={videoSectionRef} className="py-20 bg-fuchsia-50 rounded-3xl">
+      <section ref={videoSectionRef} className="py-20 bg-fuchsia-50 rounded-3xl ring-1 ring-gray-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global.</h2>
