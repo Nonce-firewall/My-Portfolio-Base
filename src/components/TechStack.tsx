@@ -8,7 +8,7 @@ interface TechLogo {
   name: string
 }
 
-// Your 9 specific technology logos
+[span_0](start_span)// Your technology logos array[span_0](end_span)
 const logos: TechLogo[] = [
   { src: '/tech-logos/react.webp', alt: 'React Logo', name: 'React' },
   { src: '/tech-logos/nextjs.webp', alt: 'Next.js Logo', name: 'Next.js' },
@@ -27,10 +27,23 @@ const logos: TechLogo[] = [
 
 const TechStack: React.FC = () => {
   return (
-    <section className="py-12 bg-purple-200 blur-xl -mt-16 sm:-mt-20 md:-mt-24 z-10 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    // 1. The main section is now a positioning container.
+    //    The blur and background styles have been removed from here.
+    <section className="relative py-12 -mt-16 sm:-mt-20 md:-mt-24">
+      
+      {/* 2. This new div acts as the blurred background layer. */}
+      {/* It's positioned absolutely to fill the parent section. */}
+      <div
+        className="absolute inset-0 bg-purple-200 blur-xl"
+        aria-hidden="true"
+      />
+
+      {/* 3. This div holds the content and uses z-10 to sit on top. */}
+      {/* It is not affected by the blur. */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <TechStackMarquee logos={logos} speed="normal" />
       </div>
+      
     </section>
   )
 }
