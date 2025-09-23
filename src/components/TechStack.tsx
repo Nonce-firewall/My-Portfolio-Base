@@ -8,7 +8,7 @@ interface TechLogo {
   name: string
 }
 
-[span_0](start_span)// Your technology logos array[span_0](end_span)
+// My 9 specific technology logo
 const logos: TechLogo[] = [
   { src: '/tech-logos/react.webp', alt: 'React Logo', name: 'React' },
   { src: '/tech-logos/nextjs.webp', alt: 'Next.js Logo', name: 'Next.js' },
