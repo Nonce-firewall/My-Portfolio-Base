@@ -212,7 +212,7 @@ const Home: React.FC<HomeProps> = () => {
             </p>
           </div>
           <div className="max-w-4xl mx-auto">
-            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-1 ring-gray-900/10">
+            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-2 ring-blue-800/10">
               <video
                 ref={videoRef}
                 src={explainerVideoUrl}
