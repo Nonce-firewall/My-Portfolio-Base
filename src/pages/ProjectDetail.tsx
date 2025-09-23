@@ -145,7 +145,7 @@ const ProjectDetail: React.FC = () => {
                   className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 md:px-2 rounded-lg text-sm md:text-base font-medium transition-all duration-300 hover:shadow-lg flex items-center justify-center space-x-2"
                 >
                   <ExternalLink size={20} className="mr-2" />
-                  Live Demo
+                  Explore
                 </a>
               )}
               {project.github_url && (
