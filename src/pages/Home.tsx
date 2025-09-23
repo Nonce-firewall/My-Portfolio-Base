@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, ArrowRight, Mail, MessageCircle, Clock } from 'lucide-react'
 import Hero from '../components/Hero'
+import TechStack from '../components/TechStack' // Import the new component
 import ProjectCard from '../components/ProjectCard'
 import ReviewCard from '../components/ReviewCard'
 import TeamMemberCard from '../components/TeamMemberCard'
@@ -32,7 +33,6 @@ const Home: React.FC<HomeProps> = () => {
 
   // Video URL from Supabase Storage
   const explainerVideoUrl = "https://cxhspurcxgcseikfwnpm.supabase.co/storage/v1/object/public/new-images-bucket/projects_20250922_010222897.mp4";
-
   const handleNavigation = (path: string) => {
     navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -48,7 +48,8 @@ const Home: React.FC<HomeProps> = () => {
     const [featuredProjectsResult, allProjectsResult, reviewsResult, teamMembersResult, settingsResult] = await Promise.all([
       db.getProjects(true),
       db.getProjects(),
-      db.getReviews(true, 4), // Limit to latest 4 reviews
+     
+       db.getReviews(true, 4), // Limit to latest 4 reviews
       db.getTeamMembers(true), // Only active team members
       db.getSiteSettings()
     ])
@@ -61,6 +62,7 @@ const Home: React.FC<HomeProps> = () => {
     
     // Only update reviews if the data has actually changed
     if (reviewsResult.data && !arraysEqual(reviewsResult.data, reviews)) {
+    
       setReviews(reviewsResult.data)
     }
     
@@ -78,7 +80,8 @@ const Home: React.FC<HomeProps> = () => {
     // Subscribe to real-time changes
     const setupSubscriptions = async () => {
       const { subscribeToTable } = await import('../lib/supabase')
-      
+   
+       
       subscribeToTable('projects', () => {
         fetchData()
       })
@@ -92,6 +95,7 @@ const Home: React.FC<HomeProps> = () => {
       })
       
       subscribeToTable('site_settings', () => {
+ 
         fetchData()
       })
     }
@@ -105,6 +109,7 @@ const Home: React.FC<HomeProps> = () => {
         unsubscribeFromTable('reviews')
         unsubscribeFromTable('team_members')
         unsubscribeFromTable('site_settings')
+      
       }
       cleanup()
     }
@@ -118,7 +123,6 @@ const Home: React.FC<HomeProps> = () => {
       },
       { threshold: 0.5 } // Trigger when 50% of the video is visible
     );
-
     const currentVideoSection = videoSectionRef.current;
     if (currentVideoSection) {
       observer.observe(currentVideoSection);
@@ -142,7 +146,8 @@ const Home: React.FC<HomeProps> = () => {
       } else {
         videoRef.current.pause();
       }
-    }
+ 
+       }
   }, [isIntersecting]);
 
   // Memoize display arrays to prevent unnecessary re-creation
@@ -184,7 +189,8 @@ const Home: React.FC<HomeProps> = () => {
         // Re-enable transition after a brief moment
         setTimeout(() => {
           setIsTransitioning(true)
-        }, 50)
+      
+         }, 50)
       }, 500) // Wait for transition to complete
       
       return () => clearTimeout(timer)
@@ -196,6 +202,7 @@ const Home: React.FC<HomeProps> = () => {
     if (currentTeamIndex === teamMembers.length && teamMembers.length > 0) {
       // We're showing the duplicated first team member, prepare to loop back
       const timer = setTimeout(() => {
+        
         setIsTeamTransitioning(false)
         setCurrentTeamIndex(0)
         // Re-enable transition after a brief moment
@@ -210,6 +217,7 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <div className="min-h-screen animate-fade-in">
+    
       <SEOHead
         title="Nonce Firewall - Expert Full-Stack Developer | React, Next.js & Node.js | Custom Web Development"
         description="Professional full-stack developer specializing in React, Next.js, Node.js, and modern web technologies. Custom web applications, e-commerce solutions, API development, and scalable development services. 5+ years experience with 50+ completed projects."
@@ -219,6 +227,7 @@ const Home: React.FC<HomeProps> = () => {
       />
       <ScrollToTopAndBottomButtons showScrollDownButton={false} />
       <Hero />
+      <TechStack /> {/* Add the marquee here */}
       
       {/* About Section */}
       <section id="about-section" className="py-20 bg-white">
@@ -226,8 +235,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">About</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {settings?.about_text ||
- 'Passionate full-stack developer with expertise in modern web technologies. I create scalable, user-friendly applications that solve real-world problems and deliver exceptional user experiences.'}
+              {settings?.about_text || 'Passionate full-stack developer with expertise in modern web technologies. I create scalable, user-friendly applications that solve real-world problems and deliver exceptional user experiences.'}
             </p>
             <div className="mt-8">
               <button
@@ -237,6 +245,7 @@ const Home: React.FC<HomeProps> = () => {
                 <span className="relative z-10">Learn More</span>
                 <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                 
+           
                 {/* Subtle gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
@@ -259,11 +268,13 @@ const Home: React.FC<HomeProps> = () => {
             <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-1 ring-gray-900/10">
               <video
                 ref={videoRef}
-                src={explainerVideoUrl}
+       
+                 src={explainerVideoUrl}
                 muted         // Muted is essential for autoplay in modern browsers
                 loop          // The video will loop continuously
                 playsInline   // Ensures video plays inline on iOS
-                className="w-full h-full object-cover"
+  
+                 className="w-full h-full object-cover"
                 preload="metadata" // Helps load the first frame faster
               />
             </div>
@@ -278,6 +289,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Featured Projects</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+             
               Recent projects that showcase my skills and expertise in web development.
             </p>
           </div>
@@ -287,10 +299,12 @@ const Home: React.FC<HomeProps> = () => {
             {featuredProjects.slice(0, 3).map((project) => (
               <div key={project.id}>
                 <ProjectCard 
+  
                   project={project} 
                   onClick={() => {
                     navigate(`/projects/${project.id}`)
                     window.scrollTo({ top: 0, behavior: 'smooth' })
+                  
                   }}
                 />
               </div>
@@ -300,6 +314,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center">
             <button
               onClick={() => handleNavigation('/projects')}
+         
               className="btn-primary py-1 px-2 inline-flex items-center transform hover:scale-105 active:scale-95"
             >
               Projects
@@ -316,7 +331,8 @@ const Home: React.FC<HomeProps> = () => {
             <div className="text-center mb-16">
               <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Testimonials</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                ​Real results, real feedback. These testimonials reflect the quality and dedication I bring to every project.
+   
+               ​Real results, real feedback. These testimonials reflect the quality and dedication I bring to every project.
               </p>
             </div>
 
@@ -328,10 +344,12 @@ const Home: React.FC<HomeProps> = () => {
                 >
                   {displayReviews.map((review, index) => (
                     <div key={`${review.id}-${index}`} className="w-full flex-shrink-0 px-4">
+            
                       <ReviewCard 
                         review={review} 
                         variant="preview"
                         project={review.project_id ? allProjects.find(p => p.id === review.project_id) : undefined}
+        
                       />
                     </div>
                   ))}
@@ -339,32 +357,37 @@ const Home: React.FC<HomeProps> = () => {
               </div>
 
               {/* Review indicators */}
-              <div className="flex justify-center items-center mt-8 space-x-4">
+ 
+                           <div className="flex justify-center items-center mt-8 space-x-4">
                 <div className="flex space-x-2">
                 {reviews && reviews.map((_, reviewIndex) => (
                   <button
                     key={reviewIndex}
-                    onClick={() => {
+     
+                                   onClick={() => {
                       setIsTransitioning(true)
                       setCurrentReviewIndex(reviewIndex)
                     }}
+                   
                     className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                      reviewIndex === currentReviewIndex ||
- (currentReviewIndex === reviews.length && reviewIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
+                      reviewIndex === currentReviewIndex || (currentReviewIndex === reviews.length && reviewIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   />
                 ))}
                 </div>
                 
-                {/* View All Reviews Button */}
+    
+                             {/* View All Reviews Button */}
                 <button
                   onClick={() => handleNavigation('/reviews')}
                   className="group flex items-center space-x-2 px-1 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-md"
+          
                   title="View all reviews"
                 >
                   <span className="text-sm font-medium">View All</span>
                   <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
                 </button>
+              
               </div>
             </div>
           </div>
@@ -376,7 +399,8 @@ const Home: React.FC<HomeProps> = () => {
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Meet The Team</h2>
+    
+                      <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Meet The Team</h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 I believe in a collaborative approach, ensuring every detail is perfect and your project is delivered with excellence. We're passionate creators working in sync to turn your vision into a stunning reality, fast⚡
               </p>
@@ -385,25 +409,31 @@ const Home: React.FC<HomeProps> = () => {
             <div className="max-w-4xl mx-auto">
               <div className="relative overflow-hidden">
                 <div 
-                  className={`flex ${isTeamTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
+             
+                   className={`flex ${isTeamTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
                   style={{ transform: `translateX(-${currentTeamIndex * 100}%)` }}
                 >
                   {displayTeamMembers.map((member, index) => (
                     <div key={`${member.id}-${index}`} className="w-full flex-shrink-0 px-4">
-                      <React.Suspense fallback={
+    
+                                      <React.Suspense fallback={
                         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 text-center animate-pulse">
                           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full mx-auto mb-3 sm:mb-4"></div>
-                          <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-2"></div>
+               
+                           <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-2"></div>
                           <div className="h-3 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
                           <div className="space-y-2">
-                            <div className="h-3 bg-gray-200 rounded w-full"></div>
+                        
+                             <div className="h-3 bg-gray-200 rounded w-full"></div>
                             <div className="h-3 bg-gray-200 rounded w-3/4 mx-auto"></div>
                           </div>
                         </div>
-                      }>
+         
+                                   }>
                         <TeamMemberCard teamMember={member} variant="preview" />
                       </React.Suspense>
                     </div>
+                  
                   ))}
                 </div>
               </div>
@@ -411,20 +441,22 @@ const Home: React.FC<HomeProps> = () => {
               {/* Team member indicators */}
               <div className="flex justify-center mt-8 space-x-2">
                 {teamMembers && teamMembers.map((_, memberIndex) => (
-                  <button
+             
+                   <button
                     key={memberIndex}
                     onClick={() => {
                       setIsTeamTransitioning(true)
                       setCurrentTeamIndex(memberIndex)
-                    }}
+         
+                     }}
                     className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                      memberIndex === currentTeamIndex ||
- (currentTeamIndex === teamMembers.length && memberIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
+                      memberIndex === currentTeamIndex || (currentTeamIndex === teamMembers.length && memberIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                   />
                 ))}
               </div>
             </div>
+          
           </div>
         </section>
       )}
@@ -435,7 +467,8 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Ready To Launch?</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Let's discuss how we can help bring your ideas to life. Get in touch and let's create something amazing for your online presence.
+         
+           Let's discuss how we can help bring your ideas to life. Get in touch and let's create something amazing for your online presence.
             </p>
           </div>
 
@@ -444,58 +477,70 @@ const Home: React.FC<HomeProps> = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 {/* Contact Info */}
                 <div className="space-y-8">
-                  <div>
+        
+                      <div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-6">Let's Connect</h3>
                     <div className="space-y-6">
                       <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                   
+                           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                           <Mail className="w-6 h-6 text-blue-500" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900">Email</h4>
+          
+                                   <h4 className="font-semibold text-gray-900">Email</h4>
                           <p className="text-gray-600">{settings?.email || 'hello@noncefirewall.dev'}</p>
                         </div>
                       </div>
                       
                       <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+       
+                                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                           <MessageCircle className="w-6 h-6 text-green-500" />
                         </div>
-                        <div>
+                      
+                         <div>
                           <h4 className="font-semibold text-gray-900">WhatsApp</h4>
                           <p className="text-gray-600">Available for quick chats</p>
                         </div>
-                      </div>
+                
+                     </div>
                       
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                          <Clock className="w-6 h-6 text-purple-500" />
+                
+                         <Clock className="w-6 h-6 text-purple-500" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">Response Time</h4>
-                          <p className="text-gray-600">Within 24 hours</p>
+         
+                                     <p className="text-gray-600">Within 24 hours</p>
                         </div>
                       </div>
                     </div>
-                  </div>
+              
+                   </div>
                 </div>
 
                 {/* Quick Contact Form */}
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">Send a Message</h3>
                   <div className="text-center">
-                    <p className="text-gray-600 mb-6">
+ 
+                                       <p className="text-gray-600 mb-6">
                       Ready To Launch? Use the contact form to provide detailed information about your requirements.
                     </p>
                     <button
                       onClick={() => handleNavigation('/contact')}
                       className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg flex items-center justify-center transform hover:scale-105 active:scale-95"
+                   
                     >
                       Open Form
                       <ArrowRight size={17} className="ml-2" />
                     </button>
                   </div>
-                </div>
+             
+                 </div>
               </div>
             </div>
           </div>
