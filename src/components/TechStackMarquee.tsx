@@ -39,7 +39,7 @@ const TechStackMarquee: React.FC<TechStackMarqueeProps> = ({
         <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white/80 to-transparent z-10 pointer-events-none"></div>
         
         {/* Marquee container: Now uses inline-flex and flex-nowrap */}
-        <div className="inline-flex flex-nowrap">
+        <div className="<div className="inline-flex flex-nowrap space-x-8">
           {/* First set of logos */}
           <div className={`flex items-center space-x-8 ${getAnimationClass()}`}>
             {logos.map((logo, index) => (
