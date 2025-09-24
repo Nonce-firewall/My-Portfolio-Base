@@ -67,13 +67,13 @@ const Hero: React.FC<HeroProps> = () => {
           <div className="flex flex-row sm:flex-row gap-4 justify-center items-center">
             <button
               onClick={() => navigate('/projects')}
-              className="py-2 px-4 bg-indigo-600 text-white hover:bg-gray-800 transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
+              className="py-2 px-4 bg-indigo-600 text-white hover:bg-gray-800 transition-all duration-300 rounded-full transform hover:scale-105 active:scale-95 hover:shadow-lg"
             >
               View My Work
             </button>
             <button
               onClick={() => navigate('/contact')}
-              className="py-2 px-4 bg-blue-600 text-white hover:bg-orange-700 hover:text-white transition-all duration-300 rounded-md transform hover:scale-105 active:scale-95 hover:shadow-lg"
+              className="py-2 px-4 bg-blue-600 text-white hover:bg-orange-700 hover:text-white transition-all duration-300 rounded-full transform hover:scale-105 active:scale-95 hover:shadow-lg"
             >
               Get In Touch
             </button>
