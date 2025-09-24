@@ -206,7 +206,7 @@ const Home: React.FC<HomeProps> = () => {
       <section ref={videoSectionRef} className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed|Get Global.</h2>
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global✓</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               An affordable website with prompt delivery to help boost your online presence and increase global reach!
             </p>
