@@ -165,7 +165,7 @@ const ProjectDetail: React.FC = () => {
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
                 <Tag size={3} className="mr-2" />
-                Technologies Used
+                Tech Stacks|Platforms
               </h3>
               <div className="flex flex-wrap gap-2">
                 {project.tech_stack.map((tech, index) => (
