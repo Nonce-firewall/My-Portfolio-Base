@@ -158,25 +158,23 @@ const Hero: React.FC<HeroProps> = () => {
           */}
 
           {/* Stats */}
-          {settings && (
-            <React.Suspense fallback={
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto animate-slide-up">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="text-center">
-                    <div className="h-12 bg-gray-200 rounded mb-2 animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                  </div>
-                ))}
-              </div>
-            }>
-              <AnimatedStats
-                yearsExperience={settings.years_experience}
-                projectsCompleted={settings.projects_completed}
-                happyClients={settings.happy_clients}
-                commitsCount={settings.commits_count}
-              />
-            </React.Suspense>
-          )}
+          <React.Suspense fallback={
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto animate-slide-up">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="text-center">
+                  <div className="h-12 bg-gray-200 rounded mb-2 animate-pulse"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              ))}
+            </div>
+          }>
+            <AnimatedStats
+              yearsExperience={4}
+              projectsCompleted={20}
+              happyClients={20}
+              commitsCount={799}
+            />
+          </React.Suspense>
         </div>
 
         {/* Scroll indicator */}
