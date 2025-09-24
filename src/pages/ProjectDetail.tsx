@@ -235,7 +235,7 @@ const ProjectDetail: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Project Info</h3>
               <div className="space-y-3">
                 <div>
-                  <span className="text-sm font-medium text-gray-500">Created</span>
+                  <span className="text-sm font-medium text-gray-500">Published</span>
                   <p className="text-gray-900">{formatDate(project.created_at)}</p>
                 </div>
                 <div>
