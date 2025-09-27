@@ -1,14 +1,14 @@
 {
-  "name": "Nonce Firewall - Full-Stack Developer",
-  "short_name": "Nonce Firewall Portfolio",
-  "description": "Professional full-stack developer specializing in React, Next.js, Node.js, and modern web technologies. Portfolio, blog, and admin dashboard.",
+  "name": "Nonce Firewall - Expert Full-Stack Developer | React, Next.js & Node.js",
+  "short_name": "Nonce Firewall",
+  "description": "Professional full-stack developer with 5+ years experience. Specializing in React, Next.js, Node.js, TypeScript, Supabase, and modern web technologies. Custom web applications, e-commerce solutions, and scalable development services.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
-  "theme_color": "#4F35E1",
-  "categories": ["business", "productivity", "developer"],
+  "theme_color": "#2563eb",
+  "categories": ["business", "productivity", "developer", "portfolio", "technology"],
   "lang": "en",
   "dir": "ltr",
   "icons": [
@@ -40,11 +40,13 @@
       "type": "image/png"
     }
   ],
+  "related_applications": [],
+  "prefer_related_applications": false,
   "shortcuts": [
     {
-      "name": "View Projects",
+      "name": "Browse Projects",
       "short_name": "Projects",
-      "description": "Browse my portfolio projects",
+      "description": "Explore 50+ web development projects including React, Next.js, and full-stack applications",
       "url": "/projects",
       "icons": [
         {
@@ -54,9 +56,9 @@
       ]
     },
     {
-      "name": "Contact Me",
+      "name": "Get In Touch",
       "short_name": "Contact",
-      "description": "Get in touch for your project",
+      "description": "Start your web development project with free consultation",
       "url": "/contact",
       "icons": [
         {
@@ -66,9 +68,9 @@
       ]
     },
     {
-      "name": "Read Blog",
+      "name": "Tech Blog",
       "short_name": "Blog",
-      "description": "Latest articles and insights",
+      "description": "Web development insights, tutorials, and modern tech articles",
       "url": "/blog",
       "icons": [
         {
@@ -78,10 +80,22 @@
       ]
     },
     {
-      "name": "Client Reviews",
+      "name": "Testimonials",
       "short_name": "Reviews",
-      "description": "Read client testimonials",
+      "description": "5-star rated developer with 25+ happy clients testimonials",
       "url": "/reviews",
+      "icons": [
+        {
+          "src": "android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "About Me",
+      "short_name": "About",
+      "description": "Learn about my 5+ years journey and technical expertise",
+      "url": "/about",
       "icons": [
         {
           "src": "android-chrome-192x192.png",

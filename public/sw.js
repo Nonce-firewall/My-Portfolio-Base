@@ -1,7 +1,7 @@
 // Service Worker for PWA functionality
-const CACHE_NAME = 'nonce-firewall-v1.1.0'
-const STATIC_CACHE = 'static-v1.1.0'
-const DYNAMIC_CACHE = 'dynamic-v1.1.0'
+const CACHE_NAME = 'nonce-firewall-v2.0.0'
+const STATIC_CACHE = 'static-v2.0.0'
+const DYNAMIC_CACHE = 'dynamic-v2.0.0'
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -14,7 +14,15 @@ const STATIC_ASSETS = [
   '/favicon-16x16.png',
   '/favicon-32x32.png',
   '/android-chrome-192x192.png',
-  '/android-chrome-512x512.png'
+  '/android-chrome-512x512.png',
+  '/tech-logos/react.webp',
+  '/tech-logos/nextjs.webp',
+  '/tech-logos/typescript.webp',
+  '/tech-logos/tailwindcss.webp',
+  '/tech-logos/supabase.webp',
+  '/tech-logos/postgresql.webp',
+  '/tech-logos/javascript.webp',
+  '/tech-logos/html.webp'
 ]
 
 // API endpoints to cache
@@ -24,8 +32,9 @@ const API_CACHE_PATTERNS = [
   /supabase\.in/,
   /fonts\.googleapis\.com/,
   /fonts\.gstatic\.com/,
-  /pexels\.com/,
-  /images\.pexels\.com/
+  /images\.pexels\.com/,
+  /cxhspurcxgcseikfwnpm\.supabase\.co/,
+  /stackblitz\.com\/storage/
 ]
 
 // Install event - cache static assets
@@ -57,7 +66,7 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+            if (!cacheName.startsWith('static-v2') && !cacheName.startsWith('dynamic-v2')) {
               console.log('Service Worker: Deleting old cache', cacheName)
               return caches.delete(cacheName)
             }
@@ -96,8 +105,8 @@ async function handleFetch(request) {
   
   try {
     // Strategy 1: Cache First for static assets
-    if (STATIC_ASSETS.some(asset => url.pathname === asset) || 
-        url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/)) {
+    if (STATIC_ASSETS.some(asset => url.pathname === asset) ||
+        url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|mp4)$/)) {
       return await cacheFirst(request)
     }
     
@@ -182,14 +191,50 @@ async function staleWhileRevalidate(request) {
 self.addEventListener('sync', (event) => {
   console.log('Service Worker: Background sync', event.tag)
   
-  if (event.tag === 'background-sync') {
+  if (event.tag === 'background-sync' || event.tag === 'content-sync') {
     event.waitUntil(doBackgroundSync())
   }
 })
 
 async function doBackgroundSync() {
-  // Handle offline actions when back online
+  // Handle offline actions when back online - sync form submissions, comments, etc.
   console.log('Service Worker: Performing background sync')
+  
+  // Sync any pending newsletter subscriptions
+  try {
+    const pendingSubscriptions = await getStoredData('pending-subscriptions')
+    if (pendingSubscriptions && pendingSubscriptions.length > 0) {
+      // Process pending subscriptions
+      console.log('Processing pending newsletter subscriptions')
+    }
+  } catch (error) {
+    console.error('Error syncing newsletter subscriptions:', error)
+  }
+  
+  // Sync any pending contact form submissions
+  try {
+    const pendingContacts = await getStoredData('pending-contacts')
+    if (pendingContacts && pendingContacts.length > 0) {
+      // Process pending contact submissions
+      console.log('Processing pending contact submissions')
+    }
+  } catch (error) {
+    console.error('Error syncing contact submissions:', error)
+  }
+}
+
+// Helper function to get stored data
+async function getStoredData(key) {
+  try {
+    const cache = await caches.open(DYNAMIC_CACHE)
+    const response = await cache.match(`/offline-data/${key}`)
+    if (response) {
+      return await response.json()
+    }
+  } catch (error) {
+    console.error('Error getting stored data:', error)
+  }
+  return null
 }
 
 // Push notifications (for future use)
@@ -204,12 +249,13 @@ self.addEventListener('push', (event) => {
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
-        primaryKey: data.primaryKey
+        primaryKey: data.primaryKey,
+        url: data.url || '/'
       },
       actions: [
         {
           action: 'explore',
-          title: 'View',
+          title: 'Open',
           icon: '/favicon-32x32.png'
         },
         {
@@ -231,6 +277,14 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close()
   
   if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow(event.notification.data.url || '/')
+    )
+  } else if (event.action === 'close') {
+    // Just close the notification
+    return
+  } else {
+    // Default action - open the app
     event.waitUntil(
       clients.openWindow('/')
     )

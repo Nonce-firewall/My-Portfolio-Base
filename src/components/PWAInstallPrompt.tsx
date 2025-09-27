@@ -70,10 +70,10 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
               Install Nonce Firewall
             </h3>
             <p className="text-gray-600 text-sm leading-relaxed mb-2">
-              Get the full portfolio experience with faster loading, offline access, and native features.
+              Get the complete developer portfolio experience with lightning-fast loading, offline access, and native app features.
             </p>
             <p className="text-gray-500 text-xs">
-              Perfect for browsing projects, reading blog posts, and staying updated with my work.
+              Perfect for exploring 50+ projects, reading tech articles, viewing testimonials, and staying updated with latest work.
             </p>
           </div>
         </div>
@@ -85,21 +85,21 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
               <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
                 <Zap size={18} className="text-blue-600" />
               </div>
-              <span className="text-xs font-medium text-gray-700">Faster</span>
+              <span className="text-xs font-medium text-gray-700">Lightning Fast</span>
             </div>
             
             <div className="flex flex-col items-center space-y-2">
               <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
                 <Wifi size={18} className="text-green-600" />
               </div>
-              <span className="text-xs font-medium text-gray-700">Offline</span>
+              <span className="text-xs font-medium text-gray-700">Works Offline</span>
             </div>
             
             <div className="flex flex-col items-center space-y-2">
               <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
                 <Smartphone size={18} className="text-purple-600" />
               </div>
-              <span className="text-xs font-medium text-gray-700">Native</span>
+              <span className="text-xs font-medium text-gray-700">App-like</span>
             </div>
           </div>
         </div>

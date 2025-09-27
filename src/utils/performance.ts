@@ -19,9 +19,29 @@ export const preloadCriticalResources = () => {
   logoLink.href = '/logo.png'
   document.head.appendChild(logoLink)
   
+  // Preload critical tech stack images
+  const criticalTechImages = [
+    '/tech-logos/react.webp',
+    '/tech-logos/nextjs.webp',
+    '/tech-logos/typescript.webp',
+    '/tech-logos/tailwindcss.webp'
+  ]
+  
+  criticalTechImages.forEach(image => {
+    const imageLink = document.createElement('link')
+    imageLink.rel = 'preload'
+    imageLink.as = 'image'
+    imageLink.href = image
+    document.head.appendChild(imageLink)
+  })
+  
   // Preload critical routes for PWA
   setTimeout(() => {
     preloadCriticalRoutes()
+    // Also preload tech stack images for offline access
+    import('./pwa').then(({ preloadTechStackImages }) => {
+      preloadTechStackImages()
+    })
   }, 1500)
   
   // Preload admin routes if user might be admin

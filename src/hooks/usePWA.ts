@@ -79,10 +79,10 @@ export const usePWA = () => {
 
     // Auto-show install prompt after 30 seconds if not dismissed
     const autoPromptTimer = setTimeout(() => {
-      if (pwaState.isInstallable && !pwaState.isInstalled && !localStorage.getItem('pwa-install-dismissed') && !window.location.pathname.startsWith('/admin')) {
+      if (pwaState.isInstallable && !pwaState.isInstalled && !localStorage.getItem('pwa-install-dismissed') && !window.location.pathname.startsWith('/admin') && !window.location.pathname.includes('/blog/')) {
         setPwaState(prev => ({ ...prev, showInstallPrompt: true }))
       }
-    }, 25000) // Reduced to 25 seconds for better UX
+    }, 30000) // Increased to 30 seconds to be less intrusive
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
@@ -137,10 +137,10 @@ export const usePWA = () => {
     setPwaState(prev => ({ ...prev, showInstallPrompt: false }))
     localStorage.setItem('pwa-install-dismissed', 'true')
     
-    // Show again after 7 days
+    // Show again after 14 days (less intrusive)
     setTimeout(() => {
       localStorage.removeItem('pwa-install-dismissed')
-    }, 7 * 24 * 60 * 60 * 1000)
+    }, 14 * 24 * 60 * 60 * 1000)
   }
 
   const showInstallPromptManually = () => {
