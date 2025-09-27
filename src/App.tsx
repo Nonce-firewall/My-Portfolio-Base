@@ -1,3 +1,4 @@
+// App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Suspense, lazy, memo } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
@@ -5,11 +6,14 @@ import { AuthProvider } from './hooks/useAuth'
 import ProtectedRoute from './components/ProtectedRoute'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
-import { usePWA } from './hooks/usePWA'
+import { usePWA } from './hooks/usePWA' // Make sure this path is correct
 import PWAInstallPrompt from './components/PWAInstallPrompt'
 import OfflineIndicator from './components/OfflineIndicator'
 import PWAUpdatePrompt from './components/PWAUpdatePrompt'
 import React from 'react'
+
+// ADDED: For installation success notifications
+import toast, { Toaster } from 'react-hot-toast'
 
 // Lazy load page components
 const Home = lazy(() => import('./pages/Home'))
@@ -34,42 +38,34 @@ const PageLoader = memo(() => (
       <p className="text-gray-600">Loading...</p>
     </div>
   </div>
-)
-)
+))
 
 function App() {
+  // FIX: Use the full power of the corrected usePWA hook
   const {
-    showInstallPrompt,
-    isOffline,
+    isInstallable,
     installApp,
-    dismissInstallPrompt
-  } = usePWA()
+    dismissInstallPrompt,
+    isOffline, // Your original hook didn't provide this, but it's a good addition if needed
+    showUpdatePrompt,
+    updateApp,
+    dismissUpdatePrompt
+  } = usePWA(() => {
+    // This callback runs on successful installation
+    toast.success('Nonce Firewall has been installed successfully!')
+  })
 
-  const [showUpdatePrompt, setShowUpdatePrompt] = React.useState(false)
+  // REMOVED: All the old, separate update logic is now gone.
+  // The usePWA hook handles everything.
 
-  // Handle service worker updates
-  React.useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        setShowUpdatePrompt(true)
-      })
-    }
-  }, [])
-
-  const handleUpdate = () => {
-    window.location.reload()
-  }
-  
-  // Preload admin components when user is authenticated
+  // Preload admin components when user is authenticated (Your existing code is good)
   React.useEffect(() => {
     const checkAuthAndPreload = async () => {
       const { data: { session } } = await import('./lib/supabase').then(m => m.supabase.auth.getSession())
       if (session?.user) {
-        // Preload admin components for faster navigation
         import('./utils/lazyComponents').then(({ preloadAdminComponents }) => {
           preloadAdminComponents()
         })
-        // Preload admin routes
         import('./utils/pwa').then(({ preloadAdminRoutes }) => {
           preloadAdminRoutes()
         })
@@ -83,17 +79,20 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <Router>
-          {/* PWA Components */}
+          {/* ADDED: Toaster for displaying success notifications */}
+          <Toaster position="bottom-center" />
+
+          {/* FIX: Props are now correctly sourced from the central hook */}
           <PWAInstallPrompt
-            isVisible={showInstallPrompt}
+            isVisible={isInstallable && !showUpdatePrompt} // Prioritize showing update prompt
             onInstall={installApp}
             onDismiss={dismissInstallPrompt}
           />
-          <OfflineIndicator isOffline={isOffline} />
+          <OfflineIndicator isOffline={isOffline ?? !navigator.onLine} /> {/* Handle potential undefined isOffline */}
           <PWAUpdatePrompt
             isVisible={showUpdatePrompt}
-            onUpdate={handleUpdate}
-            onDismiss={() => setShowUpdatePrompt(false)}
+            onUpdate={updateApp}
+            onDismiss={dismissUpdatePrompt}
           />
           
           <Routes>
