@@ -1,5 +1,8 @@
-import { useState, useEffect } from 'react'
+// hooks/usePWA.ts
 
+import { useState, useEffect, useCallback } from 'react'
+
+// Define the event interface for older TypeScript versions
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
   readonly userChoice: Promise<{
@@ -9,150 +12,123 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>
 }
 
-interface PWAState {
-  isInstallable: boolean
-  isInstalled: boolean
-  isOffline: boolean
-  showInstallPrompt: boolean
-  installPrompt: BeforeInstallPromptEvent | null
-}
+export const usePWA = (onInstallSuccess?: () => void) => {
+  const [isInstallable, setIsInstallable] = useState(false)
+  const [isInstalled, setIsInstalled] = useState(false)
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  
+  // ADDED: State for handling updates
+  const [showUpdatePrompt, setShowUpdatePrompt] = useState(false)
+  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null)
 
-export const usePWA = () => {
-  const [pwaState, setPwaState] = useState<PWAState>({
-    isInstallable: false,
-    isInstalled: false,
-    isOffline: false,
-    showInstallPrompt: false,
-    installPrompt: null
-  })
+  // FIX: Wrapped handlers in useCallback to stabilize them for useEffect
+  const handleBeforeInstallPrompt = useCallback((e: Event) => {
+    e.preventDefault()
+    setIsInstallable(true)
+    setInstallPrompt(e as BeforeInstallPromptEvent)
+    console.log('beforeinstallprompt event fired')
+  }, [])
 
+  const handleAppInstalled = useCallback(() => {
+    console.log('PWA was installed')
+    setIsInstalled(true)
+    setInstallPrompt(null) // Clear the prompt event
+    setIsInstallable(false)
+    if (onInstallSuccess) {
+      onInstallSuccess() // Notify parent component of success
+    }
+  }, [onInstallSuccess])
+  
+  // ADDED: Handler for when a service worker update is found
+  const onSWUpdate = useCallback((registration: ServiceWorkerRegistration) => {
+    console.log('Service worker update found')
+    setShowUpdatePrompt(true)
+    setSwRegistration(registration)
+  }, [])
+
+  // FIX: Simplified useEffect to only run once on mount
   useEffect(() => {
-    // Check if app is already installed
-    const checkInstalled = () => {
-      const isInstalled = window.matchMedia('(display-mode: standalone)').matches ||
+    // Check initial installation status
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
                          (window.navigator as any).standalone ||
                          document.referrer.includes('android-app://')
-      
-      setPwaState(prev => ({ ...prev, isInstalled }))
-    }
+    setIsInstalled(isStandalone)
 
-    // Check online/offline status
-    const updateOnlineStatus = () => {
-      setPwaState(prev => ({ ...prev, isOffline: !navigator.onLine }))
-    }
-
-    // Handle beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault()
-      const installEvent = e as BeforeInstallPromptEvent
-      
-      setPwaState(prev => ({
-        ...prev,
-        isInstallable: true,
-        installPrompt: installEvent,
-        showInstallPrompt: !prev.isInstalled && !localStorage.getItem('pwa-install-dismissed')
-      }))
-    }
-
-    // Handle app installed event
-    const handleAppInstalled = () => {
-      setPwaState(prev => ({
-        ...prev,
-        isInstalled: true,
-        showInstallPrompt: false,
-        installPrompt: null
-      }))
-      
-      // Clear any stored dismissal
-      localStorage.removeItem('pwa-install-dismissed')
-    }
-
-    // Initial checks
-    checkInstalled()
-    updateOnlineStatus()
-
-    // Event listeners
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
     window.addEventListener('appinstalled', handleAppInstalled)
-    window.addEventListener('online', updateOnlineStatus)
-    window.addEventListener('offline', updateOnlineStatus)
 
-    // Auto-show install prompt after 30 seconds if not dismissed
-    const autoPromptTimer = setTimeout(() => {
-      if (pwaState.isInstallable && !pwaState.isInstalled && !localStorage.getItem('pwa-install-dismissed') && !window.location.pathname.startsWith('/admin') && !window.location.pathname.includes('/blog/')) {
-        setPwaState(prev => ({ ...prev, showInstallPrompt: true }))
-      }
-    }, 30000) // Increased to 30 seconds to be less intrusive
+    // ADDED: Listener for service worker updates from your registration file
+    // Your sw-registration logic should dispatch a custom event like this:
+    // document.dispatchEvent(new CustomEvent('swUpdate', { detail: registration }));
+    const handleSWUpdate = (e: Event) => onSWUpdate((e as CustomEvent).detail)
+    document.addEventListener('swUpdate', handleSWUpdate)
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       window.removeEventListener('appinstalled', handleAppInstalled)
-      window.removeEventListener('online', updateOnlineStatus)
-      window.removeEventListener('offline', updateOnlineStatus)
-      clearTimeout(autoPromptTimer)
+      document.removeEventListener('swUpdate', handleSWUpdate)
     }
-  }, [pwaState.isInstallable, pwaState.isInstalled])
+  }, [handleBeforeInstallPrompt, handleAppInstalled, onSWUpdate])
 
   const installApp = async () => {
-    if (!pwaState.installPrompt) {
-      // If no install prompt available, hide the UI prompt
-      setPwaState(prev => ({ ...prev, showInstallPrompt: false }))
+    // FIX: The main bug was here. We must use a local variable.
+    const promptToUse = installPrompt
+    if (!promptToUse) {
       return false
     }
 
     try {
-      // Always hide the prompt immediately when user clicks install
-      setPwaState(prev => ({ 
-        ...prev, 
-        showInstallPrompt: false,
-        installPrompt: null 
-      }))
+      // Show the native browser install prompt
+      await promptToUse.prompt()
       
-      await pwaState.installPrompt.prompt()
-      const { outcome } = await pwaState.installPrompt.userChoice
+      // Wait for the user's choice
+      const { outcome } = await promptToUse.userChoice
       
       if (outcome === 'accepted') {
-        // Installation accepted - the 'appinstalled' event will handle the rest
-        console.log('PWA installation accepted')
+        // The 'appinstalled' event listener will handle the state update.
+        console.log('PWA installation accepted by user')
         return true
       } else {
-        // User dismissed the installation
         console.log('PWA installation dismissed by user')
-        localStorage.setItem('pwa-install-dismissed', 'true')
         return false
       }
     } catch (error) {
-      console.error('Error installing PWA:', error)
-      // Always hide prompt on error
-      setPwaState(prev => ({ 
-        ...prev, 
-        showInstallPrompt: false,
-        installPrompt: null 
-      }))
+      console.error('Error during PWA installation:', error)
       return false
+    } finally {
+      // We no longer need the prompt event, clear it
+      setIsInstallable(false)
+      setInstallPrompt(null)
     }
   }
-
-  const dismissInstallPrompt = () => {
-    setPwaState(prev => ({ ...prev, showInstallPrompt: false }))
-    localStorage.setItem('pwa-install-dismissed', 'true')
-    
-    // Show again after 14 days (less intrusive)
-    setTimeout(() => {
-      localStorage.removeItem('pwa-install-dismissed')
-    }, 14 * 24 * 60 * 60 * 1000)
-  }
-
-  const showInstallPromptManually = () => {
-    if (pwaState.isInstallable && !pwaState.isInstalled) {
-      setPwaState(prev => ({ ...prev, showInstallPrompt: true }))
+  
+  // ADDED: Function to handle the update action
+  const updateApp = () => {
+    if (swRegistration && swRegistration.waiting) {
+      swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' })
+      // The page will reload once the new service worker takes control.
+      // You might add a listener for the 'controllerchange' event to reload.
+      let refreshing = false
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return
+        refreshing = true
+        window.location.reload()
+      })
     }
+    setShowUpdatePrompt(false)
+  }
+  
+  const dismissUpdatePrompt = () => {
+    setShowUpdatePrompt(false)
   }
 
   return {
-    ...pwaState,
+    isInstallable,
+    isInstalled,
     installApp,
-    dismissInstallPrompt,
-    showInstallPromptManually
+    // ADDED: Exposing update-related state and functions
+    showUpdatePrompt,
+    updateApp,
+    dismissUpdatePrompt,
   }
 }
