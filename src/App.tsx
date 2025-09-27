@@ -1,34 +1,31 @@
-// App.tsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Suspense, lazy, memo } from 'react'
-import { HelmetProvider } from 'react-helmet-async'
-import { AuthProvider } from './hooks/useAuth'
-import ProtectedRoute from './components/ProtectedRoute'
-import Navigation from './components/Navigation'
-import Footer from './components/Footer'
-import { usePWA } from './hooks/usePWA' // Make sure this path is correct
-import PWAInstallPrompt from './components/PWAInstallPrompt'
-import OfflineIndicator from './components/OfflineIndicator'
-import PWAUpdatePrompt from './components/PWAUpdatePrompt'
-import React from 'react'
-
-// ADDED: For installation success notifications
-import toast, { Toaster } from 'react-hot-toast'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy, memo } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
+import { AuthProvider } from './hooks/useAuth';
+import ProtectedRoute from './components/ProtectedRoute';
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
+import { usePWA } from './hooks/usePWA';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
+import PWAUpdatePrompt from './components/PWAUpdatePrompt';
+import React from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 // Lazy load page components
-const Home = lazy(() => import('./pages/Home'))
-const Projects = lazy(() => import('./pages/Projects'))
-const About = lazy(() => import('./pages/About'))
-const Contact = lazy(() => import('./pages/Contact'))
-const Reviews = lazy(() => import('./pages/Reviews'))
-const Products = lazy(() => import('./pages/Products'))
-const Blog = lazy(() => import('./pages/Blog'))
-const BlogPost = lazy(() => import('./pages/BlogPost'))
-const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Home = lazy(() => import('./pages/Home'));
+const Projects = lazy(() => import('./pages/Projects'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Reviews = lazy(() => import('./pages/Reviews'));
+const Products = lazy(() => import('./pages/Products'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
 // Lazy load admin components
-const AdminDashboard = lazy(() => import('./admin/AdminDashboard'))
-const AdminLogin = lazy(() => import('./admin/AdminLogin'))
+const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
+const AdminLogin = lazy(() => import('./admin/AdminLogin'));
 
 // Loading component
 const PageLoader = memo(() => (
@@ -38,57 +35,52 @@ const PageLoader = memo(() => (
       <p className="text-gray-600">Loading...</p>
     </div>
   </div>
-))
+));
 
 function App() {
-  // FIX: Use the full power of the corrected usePWA hook
+  // FIX: Destructure only the properties that the usePWA hook actually returns.
   const {
     isInstallable,
     installApp,
-    dismissInstallPrompt,
-    isOffline, // Your original hook didn't provide this, but it's a good addition if needed
+    // REMOVED: dismissInstallPrompt and isOffline are not provided by the hook.
     showUpdatePrompt,
     updateApp,
     dismissUpdatePrompt
   } = usePWA(() => {
     // This callback runs on successful installation
-    toast.success('Nonce Firewall has been installed successfully!')
-  })
+    toast.success('Nonce Firewall has been installed successfully!');
+  });
 
-  // REMOVED: All the old, separate update logic is now gone.
-  // The usePWA hook handles everything.
-
-  // Preload admin components when user is authenticated (Your existing code is good)
+  // Preload admin components when user is authenticated
   React.useEffect(() => {
     const checkAuthAndPreload = async () => {
-      const { data: { session } } = await import('./lib/supabase').then(m => m.supabase.auth.getSession())
+      const { data: { session } } = await import('./lib/supabase').then(m => m.supabase.auth.getSession());
       if (session?.user) {
         import('./utils/lazyComponents').then(({ preloadAdminComponents }) => {
-          preloadAdminComponents()
-        })
+          preloadAdminComponents();
+        });
         import('./utils/pwa').then(({ preloadAdminRoutes }) => {
-          preloadAdminRoutes()
-        })
+          preloadAdminRoutes();
+        });
       }
-    }
+    };
     
-    checkAuthAndPreload()
-  }, [])
+    checkAuthAndPreload();
+  }, []);
 
   return (
     <HelmetProvider>
       <AuthProvider>
         <Router>
-          {/* ADDED: Toaster for displaying success notifications */}
           <Toaster position="bottom-center" />
 
-          {/* FIX: Props are now correctly sourced from the central hook */}
+          {/* FIX: Removed onDismiss prop since the function doesn't exist. */}
           <PWAInstallPrompt
-            isVisible={isInstallable && !showUpdatePrompt} // Prioritize showing update prompt
+            isVisible={isInstallable && !showUpdatePrompt}
             onInstall={installApp}
-            onDismiss={dismissInstallPrompt}
           />
-          <OfflineIndicator isOffline={isOffline ?? !navigator.onLine} /> {/* Handle potential undefined isOffline */}
+          {/* FIX: Use navigator.onLine directly as the hook doesn't provide isOffline. */}
+          <OfflineIndicator isOffline={!navigator.onLine} />
           <PWAUpdatePrompt
             isVisible={showUpdatePrompt}
             onUpdate={updateApp}
@@ -130,7 +122,7 @@ function App() {
         </Router>
       </AuthProvider>
     </HelmetProvider>
-  )
+  );
 }
 
-export default App
+export default App;
