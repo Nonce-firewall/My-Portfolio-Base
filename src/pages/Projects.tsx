@@ -36,7 +36,7 @@ const Projects: React.FC = () => {
         "@type": "CollectionPage",
         "name": "Web Development Projects Portfolio",
         "description": "Portfolio showcasing 50+ web development projects including React applications, e-commerce solutions, and custom web applications",
-        "url": "https://noncefirewall.dev/projects",
+        "url": "https://noncefirewall.tech/projects",
         "author": {
           "@type": "Person",
           "name": "Nonce Firewall"

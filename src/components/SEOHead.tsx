@@ -30,7 +30,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   siteName = 'Nonce Firewall Portfolio',
   twitterHandle = '@noncefirewall'
 }) => {
-  const baseUrl = 'https://noncefirewall.dev'
+  const baseUrl = 'https://noncefirewall.tech'
   const fullUrl = `${baseUrl}${url}`
   const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`
 
@@ -48,6 +48,10 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullImageUrl} />
+      <meta property="og:image:secure_url" content={fullImageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={title} />
       <meta property="og:url" content={fullUrl} />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="en_US" />
@@ -59,6 +63,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImageUrl} />
+      <meta name="twitter:image:alt" content={title} />
 
       {/* Article-specific tags */}
       {type === 'article' && publishedTime && (
@@ -99,42 +104,73 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       <link rel="dns-prefetch" href="//images.pexels.com" />
       
-      {/* Structured Data for Organization */}
+      {/* Structured Data */}
       <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "Nonce Firewall",
-          "jobTitle": "Full-Stack Developer",
-          "description": description,
-          "url": baseUrl,
-          "image": fullImageUrl,
-          "sameAs": [
-            "https://github.com/noncefirewall",
-            "https://linkedin.com/in/noncefirewall",
-            "https://twitter.com/noncefirewall"
-          ],
-          "knowsAbout": [
-            "React",
-            "Next.js",
-            "Node.js",
-            "TypeScript",
-            "JavaScript",
-            "Full-Stack Development",
-            "Web Development",
-            "Frontend Development",
-            "Backend Development"
-          ],
-          "hasOccupation": {
-            "@type": "Occupation",
-            "name": "Full-Stack Developer",
-            "occupationLocation": {
-              "@type": "Place",
-              "name": "Remote"
-            },
-            "skills": "React, Next.js, Node.js, TypeScript, JavaScript, MongoDB, PostgreSQL, Supabase"
-          }
-        })}
+        {JSON.stringify(
+          type === 'article'
+          ? {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": title,
+              "description": description,
+              "image": fullImageUrl,
+              "author": {
+                "@type": "Person",
+                "name": author,
+                "url": baseUrl
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": siteName,
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": `${baseUrl}/android-chrome-512x512.png`
+                }
+              },
+              "url": fullUrl,
+              "datePublished": publishedTime,
+              "dateModified": modifiedTime || publishedTime,
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": fullUrl
+              },
+              "keywords": tags.join(', ')
+            }
+          : {
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Nonce Firewall",
+              "jobTitle": "Full-Stack Developer",
+              "description": description,
+              "url": baseUrl,
+              "image": fullImageUrl,
+              "sameAs": [
+                "https://github.com/noncefirewall",
+                "https://linkedin.com/in/noncefirewall",
+                "https://twitter.com/noncefirewall"
+              ],
+              "knowsAbout": [
+                "React",
+                "Next.js",
+                "Node.js",
+                "TypeScript",
+                "JavaScript",
+                "Full-Stack Development",
+                "Web Development",
+                "Frontend Development",
+                "Backend Development"
+              ],
+              "hasOccupation": {
+                "@type": "Occupation",
+                "name": "Full-Stack Developer",
+                "occupationLocation": {
+                  "@type": "Place",
+                  "name": "Remote"
+                },
+                "skills": "React, Next.js, Node.js, TypeScript, JavaScript, MongoDB, PostgreSQL, Supabase"
+              }
+            }
+        )}
       </script>
     </Helmet>
   )

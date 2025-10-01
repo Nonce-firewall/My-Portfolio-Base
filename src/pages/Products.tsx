@@ -37,7 +37,7 @@ const Products: React.FC<ProductsProps> = () => {
         "@type": "CollectionPage",
         "name": "Developer Tools & Products",
         "description": "Collection of developer tools and products for modern web development",
-        "url": "https://noncefirewall.dev/products",
+        "url": "https://noncefirewall.tech/products",
         "author": {
           "@type": "Person",
           "name": "Nonce Firewall"
