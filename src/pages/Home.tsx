@@ -181,162 +181,66 @@ const Home: React.FC<HomeProps> = () => {
       <TechStack />
       
       {/* About Section */}
-      <section id="about-section" className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section id="about-section" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full mb-4">
-              About Me
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Building Digital Solutions That Matter
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">About</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
               {settings?.about_text || 'Passionate full-stack developer with expertise in modern web technologies. I create scalable, user-friendly applications that solve real-world problems and deliver exceptional user experiences.'}
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-              <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Full-Stack Expertise</h3>
-              <p className="text-gray-600 leading-relaxed">
-                End-to-end development with modern frameworks and best practices for scalable solutions.
-              </p>
+            <div className="mt-8">
+              <button
+                onClick={() => handleNavigation('/about')}
+                className="group relative inline-flex items-center px-2 py-1 bg-gradient-to-r from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-lg"
+              >
+                <span className="relative z-10">Learn More</span>
+                <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
             </div>
-
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-              <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Performance Focused</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Optimized applications that load fast and deliver exceptional user experiences.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
-              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Quality Assured</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Rigorous testing and code reviews ensure reliable, maintainable solutions.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <button
-              onClick={() => handleNavigation('/about')}
-              className="group inline-flex items-center px-8 py-3.5 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-xl"
-            >
-              <span>Discover My Journey</span>
-              <ChevronRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
           </div>
         </div>
       </section>
 
       {/* Explainer Video Section */}
-      <section ref={videoSectionRef} className="py-24 bg-white">
+      <section ref={videoSectionRef} className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <span className="inline-block px-4 py-1.5 bg-green-100 text-green-700 text-sm font-semibold rounded-full mb-4">
-                Your Success Story
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-6">
-                Get Noticed. Go Global.
-              </h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                An affordable website with prompt delivery to help boost your online presence and increase global reach. Watch how I transform ideas into powerful digital experiences.
-              </p>
-
-              <div className="space-y-4">
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Fast Turnaround</h4>
-                    <p className="text-gray-600">Projects delivered on time, every time</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Affordable Pricing</h4>
-                    <p className="text-gray-600">Quality solutions that fit your budget</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                    <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-1">Global Reach</h4>
-                    <p className="text-gray-600">Expand your presence worldwide</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="order-1 lg:order-2">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl"></div>
-                <div className="relative rounded-2xl shadow-2xl overflow-hidden border border-gray-200">
-                  <video
-                    ref={videoRef}
-                    src={explainerVideoUrl}
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                    preload="metadata"
-                  />
-                </div>
-              </div>
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global✓</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              An affordable website with prompt delivery to help boost your online presence and increase global reach!
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-1 ring-gray-800/10">
+              <video
+                ref={videoRef}
+                src={explainerVideoUrl}
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+                preload="metadata"
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Projects */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20 bg-white rounded-3xl ring-2 ring-blue-800/12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 text-sm font-semibold rounded-full mb-4">
-              Portfolio
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-6">Featured Projects</h2>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              Explore real-world applications I've built, showcasing technical expertise and creative problem-solving across diverse industries.
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Featured Projects</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Recent projects that showcase my skills and expertise in web development.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
             {featuredProjects.slice(0, 3).map((project) => (
-              <div key={project.id} className="transform transition-all duration-300 hover:-translate-y-2">
-                <ProjectCard
-                  project={project}
+              <div key={project.id}>
+                <ProjectCard 
+                  project={project} 
                   onClick={() => {
                     navigate(`/projects/${project.id}`)
                     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -345,25 +249,13 @@ const Home: React.FC<HomeProps> = () => {
               </div>
             ))}
           </div>
-
-          {featuredProjects.length === 0 && (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <p className="text-gray-500 text-lg">No featured projects yet</p>
-            </div>
-          )}
-
           <div className="text-center">
             <button
               onClick={() => handleNavigation('/projects')}
-              className="group inline-flex items-center px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-xl"
+              className="btn-primary py-1 px-2 inline-flex items-center transform hover:scale-105 active:scale-95"
             >
-              <span>View All Projects</span>
-              <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+              Projects
+              <ArrowRight size={17} className="ml-2" />
             </button>
           </div>
         </div>
@@ -371,68 +263,53 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* Reviews Section */}
       {displayReviews && displayReviews.length > 0 && (
-        <section className="py-24 bg-white">
+        <section className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <span className="inline-block px-4 py-1.5 bg-yellow-100 text-yellow-700 text-sm font-semibold rounded-full mb-4">
-                Client Testimonials
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-6">What Clients Say</h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Testimonials</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Real results, real feedback. These testimonials reflect the quality and dedication I bring to every project.
               </p>
             </div>
-
-            <div className="max-w-5xl mx-auto">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-3xl blur-2xl"></div>
-                <div className="relative bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-                  <div className="relative overflow-hidden">
-                    <div
-                      className={`flex ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
-                      style={{ transform: `translateX(-${currentReviewIndex * 100}%)` }}
-                    >
-                      {displayReviews.map((review, index) => (
-                        <div key={`${review.id}-${index}`} className="w-full flex-shrink-0 px-4">
-                          <ReviewCard
-                            review={review}
-                            variant="preview"
-                            project={review.project_id ? allProjects.find(p => p.id === review.project_id) : undefined}
-                          />
-                        </div>
-                      ))}
+            <div className="max-w-4xl mx-auto">
+              <div className="relative overflow-hidden">
+                <div 
+                  className={`flex ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
+                  style={{ transform: `translateX(-${currentReviewIndex * 100}%)` }}
+                >
+                  {displayReviews.map((review, index) => (
+                    <div key={`${review.id}-${index}`} className="w-full flex-shrink-0 px-4">
+                      <ReviewCard 
+                        review={review} 
+                        variant="preview"
+                        project={review.project_id ? allProjects.find(p => p.id === review.project_id) : undefined}
+                      />
                     </div>
-                  </div>
-
-                  <div className="flex justify-center items-center mt-8 space-x-4">
-                    <div className="flex space-x-2">
-                      {reviews.map((_, reviewIndex) => (
-                        <button
-                          key={reviewIndex}
-                          onClick={() => {
-                            setIsTransitioning(true)
-                            setCurrentReviewIndex(reviewIndex)
-                          }}
-                          className={`h-2 rounded-full transition-all duration-300 ${
-                            reviewIndex === currentReviewIndex || (currentReviewIndex === reviews.length && reviewIndex === 0)
-                              ? 'w-8 bg-blue-600'
-                              : 'w-2 bg-gray-300 hover:bg-gray-400'
-                          }`}
-                          aria-label={`Go to testimonial ${reviewIndex + 1}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-
-              <div className="text-center mt-8">
+              <div className="flex justify-center items-center mt-8 space-x-4">
+                <div className="flex space-x-2">
+                {reviews.map((_, reviewIndex) => (
+                  <button
+                    key={reviewIndex}
+                    onClick={() => {
+                      setIsTransitioning(true)
+                      setCurrentReviewIndex(reviewIndex)
+                    }}
+                    className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                      reviewIndex === currentReviewIndex || (currentReviewIndex === reviews.length && reviewIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+                </div>
                 <button
                   onClick={() => handleNavigation('/reviews')}
-                  className="group inline-flex items-center px-6 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-gray-300 text-gray-700 hover:text-gray-900 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+                  className="group flex items-center space-x-2 px-1 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-md"
+                  title="View all reviews"
                 >
-                  <span>Read All Testimonials</span>
-                  <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  <span className="text-sm font-medium">View All</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-300" />
                 </button>
               </div>
             </div>
@@ -442,65 +319,52 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* Team Section */}
       {displayTeamMembers && displayTeamMembers.length > 0 && (
-        <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+        <section className="py-20 bg-white rounded-3xl ring-2 ring-blue-800/12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <span className="inline-block px-4 py-1.5 bg-purple-100 text-purple-700 text-sm font-semibold rounded-full mb-4">
-                Our Team
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-6">Meet The Team</h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-                I believe in a collaborative approach, ensuring every detail is perfect and your project is delivered with excellence. We're passionate creators working in sync to turn your vision into a stunning reality, fast.
+              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Meet The Team</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                I believe in a collaborative approach, ensuring every detail is perfect and your project is delivered with excellence. We're passionate creators working in sync to turn your vision into a stunning reality, fast⚡
               </p>
             </div>
-
             <div className="max-w-4xl mx-auto">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-purple-500/10 rounded-3xl blur-2xl"></div>
-                <div className="relative bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-                  <div className="relative overflow-hidden">
-                    <div
-                      className={`flex ${isTeamTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
-                      style={{ transform: `translateX(-${currentTeamIndex * 100}%)` }}
-                    >
-                      {displayTeamMembers.map((member, index) => (
-                        <div key={`${member.id}-${index}`} className="w-full flex-shrink-0 px-4">
-                          <React.Suspense fallback={
-                            <div className="bg-white rounded-xl p-6 text-center animate-pulse">
-                              <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                              <div className="h-5 bg-gray-200 rounded w-1/2 mx-auto mb-2"></div>
-                              <div className="h-4 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
-                              <div className="space-y-2">
-                                <div className="h-3 bg-gray-200 rounded w-full"></div>
-                                <div className="h-3 bg-gray-200 rounded w-3/4 mx-auto"></div>
-                              </div>
-                            </div>
-                          }>
-                            <TeamMemberCard teamMember={member} variant="preview" />
-                          </React.Suspense>
+              <div className="relative overflow-hidden">
+                <div 
+                  className={`flex ${isTeamTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
+                  style={{ transform: `translateX(-${currentTeamIndex * 100}%)` }}
+                >
+                  {displayTeamMembers.map((member, index) => (
+                    <div key={`${member.id}-${index}`} className="w-full flex-shrink-0 px-4">
+                      <React.Suspense fallback={
+                        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 text-center animate-pulse">
+                          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-full mx-auto mb-3 sm:mb-4"></div>
+                          <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-2"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
+                          <div className="space-y-2">
+                            <div className="h-3 bg-gray-200 rounded w-full"></div>
+                            <div className="h-3 bg-gray-200 rounded w-3/4 mx-auto"></div>
+                          </div>
                         </div>
-                      ))}
+                      }>
+                        <TeamMemberCard teamMember={member} variant="preview" />
+                      </React.Suspense>
                     </div>
-                  </div>
-
-                  <div className="flex justify-center mt-8 space-x-2">
-                    {teamMembers.map((_, memberIndex) => (
-                      <button
-                        key={memberIndex}
-                        onClick={() => {
-                          setIsTeamTransitioning(true)
-                          setCurrentTeamIndex(memberIndex)
-                        }}
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          memberIndex === currentTeamIndex || (currentTeamIndex === teamMembers.length && memberIndex === 0)
-                            ? 'w-8 bg-purple-600'
-                            : 'w-2 bg-gray-300 hover:bg-gray-400'
-                        }`}
-                        aria-label={`Go to team member ${memberIndex + 1}`}
-                      />
-                    ))}
-                  </div>
+                  ))}
                 </div>
+              </div>
+              <div className="flex justify-center mt-8 space-x-2">
+                {teamMembers.map((_, memberIndex) => (
+                  <button
+                    key={memberIndex}
+                    onClick={() => {
+                      setIsTeamTransitioning(true)
+                      setCurrentTeamIndex(memberIndex)
+                    }}
+                    className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                      memberIndex === currentTeamIndex || (currentTeamIndex === teamMembers.length && memberIndex === 0) ? 'bg-blue-500' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -508,73 +372,65 @@ const Home: React.FC<HomeProps> = () => {
       )}
 
       {/* Contact Section */}
-      <section className="py-24 bg-gradient-to-br from-blue-600 to-blue-800 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <span className="inline-block px-4 py-1.5 bg-white/20 text-white text-sm font-semibold rounded-full mb-4 backdrop-blur-sm">
-              Get In Touch
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">Ready To Launch?</h2>
-            <p className="text-lg sm:text-xl text-blue-100 max-w-3xl mx-auto">
+      <section className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Ready To Launch?</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Let's discuss how we can help bring your ideas to life. Get in touch and let's create something amazing for your online presence.
             </p>
           </div>
-
-          <div className="max-w-5xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 sm:p-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div className="space-y-8">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-8">Let's Connect</h3>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Let's Connect</h3>
                     <div className="space-y-6">
-                      <div className="flex items-start space-x-4 group">
-                        <div className="flex-shrink-0 w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors duration-300">
-                          <Mail className="w-6 h-6 text-blue-600" />
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Mail className="w-6 h-6 text-blue-500" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
+                          <h4 className="font-semibold text-gray-900">Email</h4>
                           <p className="text-gray-600">{settings?.email || 'hello@noncefirewall.dev'}</p>
                         </div>
                       </div>
-
-                      <div className="flex items-start space-x-4 group">
-                        <div className="flex-shrink-0 w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center group-hover:bg-green-100 transition-colors duration-300">
-                          <MessageCircle className="w-6 h-6 text-green-600" />
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                          <MessageCircle className="w-6 h-6 text-green-500" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-1">WhatsApp</h4>
+                          <h4 className="font-semibold text-gray-900">WhatsApp</h4>
                           <p className="text-gray-600">Available for quick chats</p>
                         </div>
                       </div>
-
-                      <div className="flex items-start space-x-4 group">
-                        <div className="flex-shrink-0 w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center group-hover:bg-purple-100 transition-colors duration-300">
-                          <Clock className="w-6 h-6 text-purple-600" />
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                          <Clock className="w-6 h-6 text-purple-500" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-1">Response Time</h4>
+                          <h4 className="font-semibold text-gray-900">Response Time</h4>
                           <p className="text-gray-600">Within 24 hours</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="flex flex-col justify-center">
+                <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">Send a Message</h3>
-                  <p className="text-gray-600 mb-8 text-lg">
-                    Ready to get started? Use our contact form to provide detailed information about your project requirements.
-                  </p>
-                  <button
-                    onClick={() => handleNavigation('/contact')}
-                    className="group inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-xl"
-                  >
-                    <span>Open Contact Form</span>
-                    <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                  </button>
+                  <div className="text-center">
+                    <p className="text-gray-600 mb-6">
+                      Ready To Launch? Use the contact form to provide detailed information about your requirements.
+                    </p>
+                    <button
+                      onClick={() => handleNavigation('/contact')}
+                      className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg flex items-center justify-center transform hover:scale-105 active:scale-95"
+                    >
+                      Open Form
+                      <ArrowRight size={17} className="ml-2" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
