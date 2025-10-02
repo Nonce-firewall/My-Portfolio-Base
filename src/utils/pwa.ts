@@ -3,39 +3,44 @@
 export const registerSW = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      // Check if we're in a development environment that doesn't support service workers
       if (window.location.hostname === 'localhost' || window.location.hostname.includes('webcontainer')) {
         console.log('Service worker registration skipped in development environment')
         return
       }
-      
+
       console.log('Registering service worker...')
-      
+
       const registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/'
+        scope: '/',
+        updateViaCache: 'none'
       })
-      
+
       console.log('Service worker registered successfully:', registration.scope)
-      
-      // Handle updates
+
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              console.log('New service worker installed, update available')
-              // Dispatch custom event for update notification
-              window.dispatchEvent(new CustomEvent('sw-update-available'))
+            if (newWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                console.log('New service worker installed, update available')
+                window.dispatchEvent(new CustomEvent('sw-update-available'))
+              } else {
+                console.log('Service worker installed for the first time')
+              }
             }
           })
         }
       })
-      
-      // Check for updates every 60 seconds
+
+      if (registration.waiting) {
+        window.dispatchEvent(new CustomEvent('sw-update-available'))
+      }
+
       setInterval(() => {
         registration.update()
       }, 60000)
-      
+
     } catch (error) {
       console.error('Service worker registration failed:', error)
     }
@@ -99,35 +104,29 @@ export const clearAppCache = async () => {
   }
 }
 
-// Preload critical routes for offline access
 export const preloadCriticalRoutes = async () => {
   if ('caches' in window) {
     try {
-      const cache = await caches.open('dynamic-v2.0.0')
+      const cache = await caches.open('dynamic-v3.0.0')
       const criticalRoutes = [
         '/',
         '/projects',
-        '/projects/featured',
         '/about',
         '/contact',
         '/blog',
-        '/reviews',
-        '/products',
-        '/admin/login'
+        '/reviews'
       ]
-      
+
       await Promise.all(
-        criticalRoutes.map(route => 
+        criticalRoutes.map(route =>
           fetch(route).then(response => {
             if (response.ok) {
               cache.put(route, response.clone())
             }
-          }).catch(() => {
-            // Ignore errors for preloading
-          })
+          }).catch(() => {})
         )
       )
-      
+
       console.log('Critical routes preloaded')
     } catch (error) {
       console.error('Error preloading routes:', error)
@@ -135,32 +134,25 @@ export const preloadCriticalRoutes = async () => {
   }
 }
 
-// Preload admin routes for authenticated users
 export const preloadAdminRoutes = async () => {
   if ('caches' in window) {
     try {
-      const cache = await caches.open('dynamic-v2.0.0')
+      const cache = await caches.open('dynamic-v3.0.0')
       const adminRoutes = [
         '/admin',
-        '/admin/login',
-        '/admin/settings',
-        '/admin/projects',
-        '/admin/blog',
-        '/admin/reviews'
+        '/admin/login'
       ]
-      
+
       await Promise.all(
-        adminRoutes.map(route => 
+        adminRoutes.map(route =>
           fetch(route).then(response => {
             if (response.ok) {
               cache.put(route, response.clone())
             }
-          }).catch(() => {
-            // Ignore errors for preloading
-          })
+          }).catch(() => {})
         )
       )
-      
+
       console.log('Admin routes preloaded')
     } catch (error) {
       console.error('Error preloading admin routes:', error)
@@ -168,11 +160,10 @@ export const preloadAdminRoutes = async () => {
   }
 }
 
-// Store data for offline sync
 export const storeOfflineData = async (key: string, data: any) => {
   if ('caches' in window) {
     try {
-      const cache = await caches.open('dynamic-v2.0.0')
+      const cache = await caches.open('dynamic-v3.0.0')
       const response = new Response(JSON.stringify(data), {
         headers: { 'Content-Type': 'application/json' }
       })
@@ -197,11 +188,10 @@ export const requestBackgroundSync = async (tag: string = 'content-sync') => {
   }
 }
 
-// Enhanced cache management for tech stack images
 export const preloadTechStackImages = async () => {
   if ('caches' in window) {
     try {
-      const cache = await caches.open('static-v2.0.0')
+      const cache = await caches.open('images-v3.0.0')
       const techImages = [
         '/tech-logos/react.webp',
         '/tech-logos/nextjs.webp',
@@ -217,19 +207,17 @@ export const preloadTechStackImages = async () => {
         '/tech-logos/github.webp',
         '/tech-logos/git.webp'
       ]
-      
+
       await Promise.all(
-        techImages.map(image => 
+        techImages.map(image =>
           fetch(image).then(response => {
             if (response.ok) {
               cache.put(image, response.clone())
             }
-          }).catch(() => {
-            // Ignore errors for preloading
-          })
+          }).catch(() => {})
         )
       )
-      
+
       console.log('Tech stack images preloaded')
     } catch (error) {
       console.error('Error preloading tech stack images:', error)

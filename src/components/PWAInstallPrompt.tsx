@@ -14,24 +14,28 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
   onDismiss
 }) => {
   const [installing, setInstalling] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
 
   const handleInstall = async () => {
     setInstalling(true)
+    setError(null)
+
     try {
       const success = await onInstall()
-      // Always reset installing state after attempt
-      setInstalling(false)
-      
+
       if (success) {
-        // Installation was accepted, prompt will be hidden by the hook
         console.log('Installation initiated successfully')
       } else {
-        // Installation was dismissed or failed, prompt should already be hidden
-        console.log('Installation was not completed')
+        console.log('Installation was dismissed or not available')
       }
     } catch (error) {
       console.error('Install error:', error)
-      setInstalling(false)
+      setError('Installation failed. Please try again.')
+    } finally {
+      setTimeout(() => {
+        setInstalling(false)
+        setError(null)
+      }, 500)
     }
   }
 
@@ -106,6 +110,12 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
 
         {/* Actions */}
         <div className="p-6 pt-2 space-y-3">
+          {error && (
+            <div className="text-red-600 text-sm text-center p-2 bg-red-50 rounded-lg">
+              {error}
+            </div>
+          )}
+
           <button
             onClick={handleInstall}
             disabled={installing}
@@ -123,10 +133,11 @@ const PWAInstallPrompt: React.FC<PWAInstallPromptProps> = ({
               </>
             )}
           </button>
-          
+
           <button
             onClick={onDismiss}
-            className="w-full text-gray-600 hover:text-gray-800 py-3 font-medium transition-colors duration-200"
+            disabled={installing}
+            className="w-full text-gray-600 hover:text-gray-800 py-3 font-medium transition-colors duration-200 disabled:opacity-50"
           >
             Maybe Later
           </button>

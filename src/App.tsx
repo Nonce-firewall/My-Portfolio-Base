@@ -41,20 +41,51 @@ function App() {
   const {
     showInstallPrompt,
     isOffline,
+    isInstalled,
     installApp,
     dismissInstallPrompt
   } = usePWA()
 
   const [showUpdatePrompt, setShowUpdatePrompt] = React.useState(false)
 
-  // Handle service worker updates
   React.useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        setShowUpdatePrompt(true)
+    if ('serviceWorker' in navigator && isInstalled) {
+      const handleUpdate = () => {
+        const lastVersion = localStorage.getItem('pwa-last-version')
+        const currentVersion = '3.0.0'
+
+        if (lastVersion && lastVersion !== currentVersion) {
+          setShowUpdatePrompt(true)
+          localStorage.setItem('pwa-last-version', currentVersion)
+        }
+      }
+
+      navigator.serviceWorker.addEventListener('controllerchange', handleUpdate)
+
+      navigator.serviceWorker.getRegistration().then(registration => {
+        if (registration) {
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  setShowUpdatePrompt(true)
+                }
+              })
+            }
+          })
+
+          setInterval(() => {
+            registration.update()
+          }, 60000)
+        }
       })
+
+      return () => {
+        navigator.serviceWorker.removeEventListener('controllerchange', handleUpdate)
+      }
     }
-  }, [])
+  }, [isInstalled])
 
   const handleUpdate = () => {
     window.location.reload()

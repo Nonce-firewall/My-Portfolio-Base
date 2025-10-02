@@ -1,7 +1,8 @@
-// Service Worker for PWA functionality
-const CACHE_NAME = 'nonce-firewall-v2.0.0'
-const STATIC_CACHE = 'static-v2.0.0'
-const DYNAMIC_CACHE = 'dynamic-v2.0.0'
+const CACHE_VERSION = '3.0.0'
+const CACHE_NAME = `nonce-firewall-v${CACHE_VERSION}`
+const STATIC_CACHE = `static-v${CACHE_VERSION}`
+const DYNAMIC_CACHE = `dynamic-v${CACHE_VERSION}`
+const IMAGE_CACHE = `images-v${CACHE_VERSION}`
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -57,16 +58,15 @@ self.addEventListener('install', (event) => {
   )
 })
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   console.log('Service Worker: Activating...')
-  
+
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (!cacheName.startsWith('static-v2') && !cacheName.startsWith('dynamic-v2')) {
+            if (!cacheName.includes(CACHE_VERSION)) {
               console.log('Service Worker: Deleting old cache', cacheName)
               return caches.delete(cacheName)
             }
@@ -102,64 +102,82 @@ self.addEventListener('fetch', (event) => {
 
 async function handleFetch(request) {
   const url = new URL(request.url)
-  
+
   try {
-    // Strategy 1: Cache First for static assets
+    if (url.pathname.match(/\.(png|jpg|jpeg|gif|svg|webp)$/)) {
+      return await cacheFirstImage(request)
+    }
+
     if (STATIC_ASSETS.some(asset => url.pathname === asset) ||
-        url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|mp4)$/)) {
+        url.pathname.match(/\.(js|css|ico|woff|woff2|ttf|eot)$/)) {
       return await cacheFirst(request)
     }
-    
-    // Strategy 2: Network First for API calls
+
     if (API_CACHE_PATTERNS.some(pattern => pattern.test(url.href))) {
-      return await networkFirst(request)
+      return await networkFirst(request, 3000)
     }
-    
-    // Strategy 3: Stale While Revalidate for pages
+
     if (url.pathname.startsWith('/') && request.headers.get('accept')?.includes('text/html')) {
       return await staleWhileRevalidate(request)
     }
-    
-    // Default: Network First
+
     return await networkFirst(request)
-    
+
   } catch (error) {
     console.error('Service Worker: Fetch error', error)
-    
-    // Return offline fallback for HTML requests
+
     if (request.headers.get('accept')?.includes('text/html')) {
       const cache = await caches.open(STATIC_CACHE)
       return await cache.match('/') || new Response('Offline', { status: 503 })
     }
-    
+
     return new Response('Network error', { status: 503 })
   }
 }
 
-// Cache First Strategy
 async function cacheFirst(request) {
   const cache = await caches.open(STATIC_CACHE)
   const cached = await cache.match(request)
-  
+
   if (cached) {
     return cached
   }
-  
+
   const response = await fetch(request)
-  if (response.status === 200) {
+  if (response.ok) {
     cache.put(request, response.clone())
   }
-  
+
   return response
 }
 
-// Network First Strategy
-async function networkFirst(request) {
+async function cacheFirstImage(request) {
+  const cache = await caches.open(IMAGE_CACHE)
+  const cached = await cache.match(request)
+
+  if (cached) {
+    return cached
+  }
+
+  const response = await fetch(request)
+  if (response.ok) {
+    cache.put(request, response.clone())
+  }
+
+  return response
+}
+
+async function networkFirst(request, timeout = 5000) {
   const cache = await caches.open(DYNAMIC_CACHE)
-  
+
   try {
-    const response = await fetch(request)
-    if (response.status === 200) {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
+
+    const response = await fetch(request, { signal: controller.signal })
+    clearTimeout(timeoutId)
+
+    if (response.ok) {
       cache.put(request, response.clone())
     }
     return response
