@@ -10,12 +10,14 @@ import SEOHead from '../components/SEOHead'
 import YouTubeEmbed from '../components/YouTubeEmbed'
 import CodeBlock from '../components/CodeBlock'
 import TableRenderer from '../components/TableRenderer'
+import RelatedPosts from '../components/RelatedPosts'
 import { db } from '../lib/supabase'
 import type { BlogPost } from '../types'
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>()
   const [post, setPost] = useState<BlogPost | null>(null)
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
   const [nextPost, setNextPost] = useState<BlogPostNavigation | null>(null)
   const [prevPost, setPrevPost] = useState<BlogPostNavigation | null>(null)
   const [loading, setLoading] = useState(true)
@@ -31,29 +33,54 @@ const BlogPostPage: React.FC = () => {
   useEffect(() => {
     const fetchPost = async () => {
       if (!slug) return
-      
+
       setLoading(true)
       setError(false)
-      
+
       try {
-        const [postResult, allPostsResult] = await Promise.all([
+        const [postResult, allPostsResult, relatedPostsResult] = await Promise.all([
           db.getBlogPostBySlug(slug),
-          db.getAllBlogPostsForNavigation()
+          db.getAllBlogPostsForNavigation(),
+          db.getBlogPosts(true, 10)
         ])
-        
+
         if (postResult.error || !postResult.data) {
           setError(true)
         } else {
           setPost(postResult.data)
           setProcessedContent(processContent(postResult.data.content))
-          
-          // Find adjacent posts for navigation
+
+          if (relatedPostsResult.data) {
+            const currentPost = postResult.data
+            const related = relatedPostsResult.data
+              .filter(p => {
+                if (p.id === currentPost.id) return false
+
+                const hasMatchingTag = p.tags?.some((tag: string) =>
+                  currentPost.tags?.includes(tag)
+                )
+                const hasMatchingCategory = p.category === currentPost.category
+
+                return hasMatchingTag || hasMatchingCategory
+              })
+              .slice(0, 5)
+
+            if (related.length < 5) {
+              const remaining = relatedPostsResult.data
+                .filter(p => p.id !== currentPost.id && !related.find(r => r.id === p.id))
+                .slice(0, 5 - related.length)
+              setRelatedPosts([...related, ...remaining])
+            } else {
+              setRelatedPosts(related)
+            }
+          }
+
           if (allPostsResult.data) {
             const currentIndex = allPostsResult.data.findIndex(p => p.slug === slug)
             if (currentIndex !== -1) {
               const prevIndex = currentIndex - 1
               const nextIndex = currentIndex + 1
-              
+
               setPrevPost(prevIndex >= 0 ? allPostsResult.data[prevIndex] : null)
               setNextPost(nextIndex < allPostsResult.data.length ? allPostsResult.data[nextIndex] : null)
             }
@@ -257,11 +284,12 @@ const BlogPostPage: React.FC = () => {
         author="Nonce Firewall"
       />
       <ScrollToTopAndBottomButtons />
-      
-      <article className="mx-auto pt-10 pb-12 px-4 sm:px-6 lg:px-6">
 
-        {/* Article Header */}
-        <header className="mb-8 max-w-3xl mx-auto">
+      <div className="max-w-7xl mx-auto pt-10 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <article className="flex-1 lg:max-w-3xl">
+            {/* Article Header */}
+            <header className="mb-8">
           <h1 className="text-1xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
             {post.title}
           </h1>
@@ -322,74 +350,80 @@ const BlogPostPage: React.FC = () => {
           )}
         </header>
 
-        {/* Article Content */}
-        <div className="p-1 mb-6 max-w-3xl mx-auto">
-          <div 
-            className="prose prose-lg prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-gray-100"
-            dangerouslySetInnerHTML={{ __html: processedContent }}
-          />
-        </div>
-
-        {/* Newsletter Signup */}
-        <div className="max-w-md mx-auto mb-12 max-w-3xl">
-          <NewsletterSignup />
-        </div>
-
-        {/* Comments Section */}
-        <div className="max-w-3xl mx-auto mb-12">
-          <BlogComments postId={post.id} />
-        </div>
-
-        {/* Navigation */}
-        <div className="text-center max-w-3xl mx-auto">
-          {/* Previous/Next Post Navigation */}
-          {(prevPost || nextPost) && (
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-              <div className="w-full sm:w-auto">
-                {prevPost ? (
-                  <button
-                    onClick={() => handleNavigation(`/blog/${prevPost.slug}`)}
-                    className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center sm:justify-start"
-                  >
-                    <ArrowLeft size={20} className="mr-2" />
-                    <div className="text-left">
-                      <div className="text-xs text-gray-500">Previous</div>
-                      <div className="text-sm font-medium truncate max-w-48">{prevPost.title}</div>
-                    </div>
-                  </button>
-                ) : (
-                  <div className="w-full sm:w-auto"></div>
-                )}
-              </div>
-              
-              <div className="w-full sm:w-auto">
-                {nextPost ? (
-                  <button
-                    onClick={() => handleNavigation(`/blog/${nextPost.slug}`)}
-                    className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center sm:justify-end"
-                  >
-                    <div className="text-right">
-                      <div className="text-xs text-gray-500">Next</div>
-                      <div className="text-sm font-medium truncate max-w-48">{nextPost.title}</div>
-                    </div>
-                    <ArrowRight size={20} className="ml-2" />
-                  </button>
-                ) : (
-                  <div className="w-full sm:w-auto"></div>
-                )}
-              </div>
+            {/* Article Content */}
+            <div className="p-1 mb-6">
+              <div
+                className="prose prose-lg prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-gray-100"
+                dangerouslySetInnerHTML={{ __html: processedContent }}
+              />
             </div>
-          )}
-          
-          <button
-            onClick={() => handleNavigation('/blog')}
-            className="btn-primary py-2 px-2 flex items-center mx-auto"
-          >
-            <ArrowLeft size={20} className="mr-2" />
-            More Articles
-          </button>
+
+            {/* Newsletter Signup */}
+            <div className="mb-12">
+              <NewsletterSignup />
+            </div>
+
+            {/* Comments Section */}
+            <div className="mb-12">
+              <BlogComments postId={post.id} />
+            </div>
+
+            {/* Navigation */}
+            <div className="text-center">
+              {(prevPost || nextPost) && (
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+                  <div className="w-full sm:w-auto">
+                    {prevPost ? (
+                      <button
+                        onClick={() => handleNavigation(`/blog/${prevPost.slug}`)}
+                        className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center sm:justify-start"
+                      >
+                        <ArrowLeft size={20} className="mr-2" />
+                        <div className="text-left">
+                          <div className="text-xs text-gray-500">Previous</div>
+                          <div className="text-sm font-medium truncate max-w-48">{prevPost.title}</div>
+                        </div>
+                      </button>
+                    ) : (
+                      <div className="w-full sm:w-auto"></div>
+                    )}
+                  </div>
+
+                  <div className="w-full sm:w-auto">
+                    {nextPost ? (
+                      <button
+                        onClick={() => handleNavigation(`/blog/${nextPost.slug}`)}
+                        className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center sm:justify-end"
+                      >
+                        <div className="text-right">
+                          <div className="text-xs text-gray-500">Next</div>
+                          <div className="text-sm font-medium truncate max-w-48">{nextPost.title}</div>
+                        </div>
+                        <ArrowRight size={20} className="ml-2" />
+                      </button>
+                    ) : (
+                      <div className="w-full sm:w-auto"></div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <button
+                onClick={() => handleNavigation('/blog')}
+                className="btn-primary py-2 px-2 flex items-center mx-auto"
+              >
+                <ArrowLeft size={20} className="mr-2" />
+                More Articles
+              </button>
+            </div>
+          </article>
+
+          {/* Sidebar for Desktop */}
+          <aside className="hidden lg:block lg:w-96 flex-shrink-0">
+            <RelatedPosts posts={relatedPosts} currentPostId={post.id} />
+          </aside>
         </div>
-      </article>
+      </div>
     </div>
   )
 }
