@@ -39,7 +39,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code, language }) => {
       <div className="absolute top-2 right-2 z-50">
         <button
           onClick={handleCopy}
-          className="flex items-center space-x-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium shadow-lg border border-gray-600"
+          className="flex items-center space-x-2 py-2 px-1 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium shadow-lg border border-gray-600"
           aria-label="Copy code to clipboard"
         >
           {isCopied ? (
