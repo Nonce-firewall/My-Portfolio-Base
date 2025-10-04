@@ -327,7 +327,7 @@ const AdminBlogPosts: React.FC = () => {
         </div>
 
         {showForm && (
-          <div className="mb-2 p-2 bg-gray-50 rounded-lg">
+          <div className="mb-6 p-6 bg-gray-50 rounded-lg">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {editingPost ? 'Edit Blog Post' : 'Create New Blog Post'}
             </h3>
@@ -423,29 +423,32 @@ const AdminBlogPosts: React.FC = () => {
                         Right-click on table cells to add/remove rows & columns
                       </span>
                     </div>
-                    <React.Suspense fallback={
-                      <div className="w-full h-80 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
-                          <p className="text-gray-600 text-sm">Loading editor...</p>
+                    <div className="mb-20">
+                      <React.Suspense fallback={
+                        <div className="w-full h-80 bg-gray-100 rounded-lg flex items-center justify-center">
+                          <div className="text-center">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                            <p className="text-gray-600 text-sm">Loading editor...</p>
+                          </div>
                         </div>
-                      </div>
-                    }>
-                      <ReactQuill
-                        ref={quillRef}
-                        theme="snow"
-                        value={formData.content}
-                        onChange={handleContentChange}
-                        modules={quillModules}
-                        formats={quillFormats}
-                        placeholder="Write your blog post content here..."
-                        style={{ height: '300px', marginBottom: '150px' }}
-                      />
-                    </React.Suspense>
+                      }>
+                        <ReactQuill
+                          ref={quillRef}
+                          theme="snow"
+                          value={formData.content}
+                          onChange={handleContentChange}
+                          modules={quillModules}
+                          formats={quillFormats}
+                          placeholder="Write your blog post content here..."
+                          className="bg-white"
+                          style={{ height: '400px' }}
+                        />
+                      </React.Suspense>
+                    </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm bg-white font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Featured Image URL
                     </label>
                     <input
@@ -458,7 +461,7 @@ const AdminBlogPosts: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm bg-white font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Tags (comma-separated)
                     </label>
                     <input
