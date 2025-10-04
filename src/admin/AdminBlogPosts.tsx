@@ -58,48 +58,53 @@ const AdminBlogPosts: React.FC = () => {
 
   // Table insertion handler
   const handleTableInsert = useCallback(() => {
-    const rows = prompt('📊 Create Table\n\nEnter number of rows (including header row):\n\nExample: Enter "3" for 1 header + 2 data rows')
-    const cols = prompt('📊 Create Table\n\nEnter number of columns/headers:\n\nExample: Enter "4" for 4 columns')
-    
-    if (rows && cols) {
-      const numRows = parseInt(rows);
-      const numCols = parseInt(cols);
-      
-      if (numRows > 0 && numCols > 0 && numRows <= 15 && numCols <= 8) {
-        const quill = quillRef.current?.getEditor();
-        if (quill) {
-          const range = quill.getSelection(true);
-          
-          // Create table HTML with proper structure
-          let tableHTML = '\n<table class="blog-table">\n';
-          
-          // Create header row
-          tableHTML += '  <thead>\n    <tr>\n';
-          for (let j = 0; j < numCols; j++) {
-            tableHTML += `      <th>Header ${j + 1}</th>\n`;
-          }
-          tableHTML += '    </tr>\n  </thead>\n';
-          
-          // Create body rows
-          tableHTML += '  <tbody>\n';
-          for (let i = 1; i < numRows; i++) {
-            tableHTML += '    <tr>\n';
+    try {
+      const rows = prompt('Create Table\n\nEnter number of rows (including header row):\n\nExample: Enter "3" for 1 header + 2 data rows')
+      const cols = prompt('Create Table\n\nEnter number of columns:\n\nExample: Enter "4" for 4 columns')
+
+      if (rows && cols) {
+        const numRows = parseInt(rows);
+        const numCols = parseInt(cols);
+
+        if (numRows > 0 && numCols > 0 && numRows <= 15 && numCols <= 8) {
+          const quill = quillRef.current?.getEditor();
+          if (quill) {
+            const range = quill.getSelection(true) || { index: quill.getLength() };
+
+            // Create table HTML with proper structure
+            let tableHTML = '<table class="blog-table"><thead><tr>';
+
+            // Create header row
             for (let j = 0; j < numCols; j++) {
-              tableHTML += `      <td>Cell ${i},${j + 1}</td>\n`;
+              tableHTML += `<th>Header ${j + 1}</th>`;
             }
-            tableHTML += '    </tr>\n';
+            tableHTML += '</tr></thead><tbody>';
+
+            // Create body rows
+            for (let i = 1; i < numRows; i++) {
+              tableHTML += '<tr>';
+              for (let j = 0; j < numCols; j++) {
+                tableHTML += `<td>Cell ${i},${j + 1}</td>`;
+              }
+              tableHTML += '</tr>';
+            }
+            tableHTML += '</tbody></table>';
+
+            // Wrap in table shortcode for proper processing
+            const tableShortcode = `\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`;
+
+            // Insert the table shortcode
+            quill.insertText(range.index, '\n');
+            quill.clipboard.dangerouslyPasteHTML(range.index + 1, tableShortcode);
+            quill.setSelection(range.index + tableShortcode.length + 2, 0);
           }
-          tableHTML += '  </tbody>\n</table>\n';
-          
-          // Wrap in table shortcode for proper processing
-          const tableShortcode = `\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`
-          
-          // Insert the table shortcode
-          quill.clipboard.dangerouslyPasteHTML(range.index, tableShortcode)
+        } else {
+          alert('Invalid Input\n\nPlease enter valid numbers:\n• Rows: 1-15 (including header)\n• Columns: 1-8');
         }
-      } else {
-        alert('❌ Invalid Input\n\nPlease enter valid numbers:\n• Rows: 1-15 (including header)\n• Columns: 1-8\n\nExample: 3 rows, 4 columns creates a table with 1 header row and 2 data rows with 4 columns each.');
       }
+    } catch (error) {
+      console.error('Error inserting table:', error);
+      alert('Failed to insert table. Please try again.');
     }
   }, []);
   // --- NEW --- Custom handler for the link button
@@ -206,14 +211,19 @@ const AdminBlogPosts: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    const postData = {
-      ...formData,
-      tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-      published_at: formData.published ? new Date().toISOString() : null
-    }
 
     try {
+      if (!formData.title || !formData.slug || !formData.content) {
+        alert('Please fill in all required fields (Title, Slug, Content)');
+        return;
+      }
+
+      const postData = {
+        ...formData,
+        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+        published_at: formData.published ? new Date().toISOString() : null
+      }
+
       if (editingPost) {
         const { error } = await db.updateBlogPost(editingPost.id, postData)
         if (error) throw error
@@ -221,11 +231,9 @@ const AdminBlogPosts: React.FC = () => {
         const { error } = await db.createBlogPost(postData)
         if (error) throw error
       }
-      
-      setShowForm(false)
-      setEditingPost(null)
+
+      await fetchPosts()
       resetForm()
-      fetchPosts()
     } catch (error) {
       console.error('Error saving blog post:', error)
       alert('Error saving blog post. Please try again.')
@@ -279,8 +287,9 @@ const AdminBlogPosts: React.FC = () => {
   }
 
   const resetForm = () => {
-    setShowForm(false)
     setEditingPost(null)
+    setShowForm(false)
+    setShowPreview(false)
     setFormData({
       title: '',
       slug: '',
