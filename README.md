@@ -1,4 +1,4 @@
-# Nonce Firewall Portfolio
+# Nonce Firewall Portfolio Website
 
 A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS. Features a complete admin dashboard for content management and integrates with Supabase for data storage.
 
