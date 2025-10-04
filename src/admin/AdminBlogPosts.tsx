@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { db } from '../lib/supabase';
 import type { BlogPost } from '../types';
+import TableBuilderModal from '../components/TableBuilderModal';
 
 
 const AdminBlogPosts: React.FC = () => {
@@ -11,6 +12,7 @@ const AdminBlogPosts: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
+  const [showTableBuilder, setShowTableBuilder] = useState(false)
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null)
   const [formData, setFormData] = useState({
     title: '',
@@ -56,51 +58,44 @@ const AdminBlogPosts: React.FC = () => {
     }
   }, [getYouTubeVideoId]);
 
-  // Table insertion handler
+  // Table insertion handler - opens modal
   const handleTableInsert = useCallback(() => {
+    setShowTableBuilder(true);
+  }, []);
+
+  // Insert table from modal
+  const insertTable = useCallback((numRows: number, numCols: number) => {
     try {
-      const rows = prompt('Create Table\n\nEnter number of rows (including header row):\n\nExample: Enter "3" for 1 header + 2 data rows')
-      const cols = prompt('Create Table\n\nEnter number of columns:\n\nExample: Enter "4" for 4 columns')
+      const quill = quillRef.current?.getEditor();
+      if (quill) {
+        const range = quill.getSelection(true) || { index: quill.getLength() };
 
-      if (rows && cols) {
-        const numRows = parseInt(rows);
-        const numCols = parseInt(cols);
+        // Create table HTML with proper structure
+        let tableHTML = '<table class="blog-table"><thead><tr>';
 
-        if (numRows > 0 && numCols > 0 && numRows <= 15 && numCols <= 8) {
-          const quill = quillRef.current?.getEditor();
-          if (quill) {
-            const range = quill.getSelection(true) || { index: quill.getLength() };
-
-            // Create table HTML with proper structure
-            let tableHTML = '<table class="blog-table"><thead><tr>';
-
-            // Create header row
-            for (let j = 0; j < numCols; j++) {
-              tableHTML += `<th>Header ${j + 1}</th>`;
-            }
-            tableHTML += '</tr></thead><tbody>';
-
-            // Create body rows
-            for (let i = 1; i < numRows; i++) {
-              tableHTML += '<tr>';
-              for (let j = 0; j < numCols; j++) {
-                tableHTML += `<td>Cell ${i},${j + 1}</td>`;
-              }
-              tableHTML += '</tr>';
-            }
-            tableHTML += '</tbody></table>';
-
-            // Wrap in table shortcode for proper processing
-            const tableShortcode = `\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`;
-
-            // Insert the table shortcode
-            quill.insertText(range.index, '\n');
-            quill.clipboard.dangerouslyPasteHTML(range.index + 1, tableShortcode);
-            quill.setSelection(range.index + tableShortcode.length + 2, 0);
-          }
-        } else {
-          alert('Invalid Input\n\nPlease enter valid numbers:\n• Rows: 1-15 (including header)\n• Columns: 1-8');
+        // Create header row
+        for (let j = 0; j < numCols; j++) {
+          tableHTML += `<th>Header ${j + 1}</th>`;
         }
+        tableHTML += '</tr></thead><tbody>';
+
+        // Create body rows
+        for (let i = 1; i < numRows; i++) {
+          tableHTML += '<tr>';
+          for (let j = 0; j < numCols; j++) {
+            tableHTML += `<td>Cell ${i},${j + 1}</td>`;
+          }
+          tableHTML += '</tr>';
+        }
+        tableHTML += '</tbody></table>';
+
+        // Wrap in table shortcode for proper processing
+        const tableShortcode = `\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`;
+
+        // Insert the table shortcode
+        quill.insertText(range.index, '\n');
+        quill.clipboard.dangerouslyPasteHTML(range.index + 1, tableShortcode);
+        quill.setSelection(range.index + tableShortcode.length + 2, 0);
       }
     } catch (error) {
       console.error('Error inserting table:', error);
@@ -322,6 +317,12 @@ const AdminBlogPosts: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <TableBuilderModal
+        isOpen={showTableBuilder}
+        onClose={() => setShowTableBuilder(false)}
+        onInsert={insertTable}
+      />
+
       <div className="p-2">
         <div className="flex justify-between items-center mb-1">
           <h2 className="text-2xl font-bold text-gray-900">Blog Posts</h2>

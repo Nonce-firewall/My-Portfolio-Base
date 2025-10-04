@@ -126,7 +126,7 @@ const BlogPostPage: React.FC = () => {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;')
-      
+
       return `<div class="code-block-embed" data-language="${language}" data-code="${escapedCode}"></div>`
     })
 
@@ -140,9 +140,31 @@ const BlogPostPage: React.FC = () => {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;')
-      
+
       return `<div class="code-block-embed" data-language="javascript" data-code="${escapedCode}"></div>`
     })
+
+    // Convert old Quill code blocks to our format for backwards compatibility
+    processedContent = processedContent.replace(
+      /<pre class="ql-syntax"[^>]*>([\s\S]*?)<\/pre>/g,
+      (_, code) => {
+        const decodedCode = code
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'")
+          .replace(/&amp;/g, '&')
+
+        const escapedCode = decodedCode
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+
+        return `<div class="code-block-embed" data-language="javascript" data-code="${escapedCode}"></div>`
+      }
+    )
 
     return processedContent
   }
