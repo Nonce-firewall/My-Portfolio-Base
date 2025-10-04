@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { Plus, Edit, Trash2, Eye, EyeOff, Calendar, Clock } from 'lucide-react';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import QuillBetterTable from 'quill-better-table';
+import 'quill-better-table/dist/quill-better-table.css';
 import { db } from '../lib/supabase';
 import type { BlogPost } from '../types';
+
+Quill.register('modules/better-table', QuillBetterTable);
 
 
 const AdminBlogPosts: React.FC = () => {
@@ -32,6 +36,14 @@ const AdminBlogPosts: React.FC = () => {
 
   const quillRef = useRef<ReactQuill>(null);
 
+  const insertTable = () => {
+    const quill = quillRef.current?.getEditor();
+    if (quill) {
+      const tableModule = quill.getModule('better-table');
+      tableModule.insertTable(3, 3);
+    }
+  };
+
   // Memoize the helper function so it's not recreated on every render
   const getYouTubeVideoId = useCallback((url: string) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -56,53 +68,7 @@ const AdminBlogPosts: React.FC = () => {
     }
   }, [getYouTubeVideoId]);
 
-  // Table insertion handler
-  const handleTableInsert = useCallback(() => {
-    const rows = prompt('📊 Create Table\n\nEnter number of rows (including header row):\n\nExample: Enter "3" for 1 header + 2 data rows')
-    const cols = prompt('📊 Create Table\n\nEnter number of columns/headers:\n\nExample: Enter "4" for 4 columns')
-    
-    if (rows && cols) {
-      const numRows = parseInt(rows);
-      const numCols = parseInt(cols);
-      
-      if (numRows > 0 && numCols > 0 && numRows <= 15 && numCols <= 8) {
-        const quill = quillRef.current?.getEditor();
-        if (quill) {
-          const range = quill.getSelection(true);
-          
-          // Create table HTML with proper structure
-          let tableHTML = '\n<table class="blog-table">\n';
-          
-          // Create header row
-          tableHTML += '  <thead>\n    <tr>\n';
-          for (let j = 0; j < numCols; j++) {
-            tableHTML += `      <th>Header ${j + 1}</th>\n`;
-          }
-          tableHTML += '    </tr>\n  </thead>\n';
-          
-          // Create body rows
-          tableHTML += '  <tbody>\n';
-          for (let i = 1; i < numRows; i++) {
-            tableHTML += '    <tr>\n';
-            for (let j = 0; j < numCols; j++) {
-              tableHTML += `      <td>Cell ${i},${j + 1}</td>\n`;
-            }
-            tableHTML += '    </tr>\n';
-          }
-          tableHTML += '  </tbody>\n</table>\n';
-          
-          // Wrap in table shortcode for proper processing
-          const tableShortcode = `\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`
-          
-          // Insert the table shortcode
-          quill.clipboard.dangerouslyPasteHTML(range.index, tableShortcode)
-        }
-      } else {
-        alert('❌ Invalid Input\n\nPlease enter valid numbers:\n• Rows: 1-15 (including header)\n• Columns: 1-8\n\nExample: 3 rows, 4 columns creates a table with 1 header row and 2 data rows with 4 columns each.');
-      }
-    }
-  }, []);
-  // --- NEW --- Custom handler for the link button
+  // Custom handler for the link button
   const handleLink = useCallback(() => {
     const quill = quillRef.current?.getEditor();
     if (!quill) return;
@@ -139,23 +105,58 @@ const AdminBlogPosts: React.FC = () => {
         [{ 'direction': 'rtl' }],
         [{ 'color': [] }, { 'background': [] }],
         [{ 'align': [] }],
-        ['link', 'image', 'video', 'table'],
+        ['link', 'image', 'video'],
         ['blockquote', 'code-block'],
         ['clean']
       ],
       handlers: {
-        'video': handleYouTubeVideo, 
-        'link': handleLink, // --- NEW --- Register the custom link handler
-        'table': handleTableInsert, // Custom table handler
+        'video': handleYouTubeVideo,
+        'link': handleLink,
       }
+    },
+    'better-table': {
+      operationMenu: {
+        items: {
+          unmergeCells: {
+            text: 'Unmerge cells'
+          },
+          insertColumnRight: {
+            text: 'Insert column right'
+          },
+          insertColumnLeft: {
+            text: 'Insert column left'
+          },
+          insertRowUp: {
+            text: 'Insert row above'
+          },
+          insertRowDown: {
+            text: 'Insert row below'
+          },
+          mergeCells: {
+            text: 'Merge cells'
+          },
+          deleteColumn: {
+            text: 'Delete column'
+          },
+          deleteRow: {
+            text: 'Delete row'
+          },
+          deleteTable: {
+            text: 'Delete table'
+          }
+        }
+      }
+    },
+    keyboard: {
+      bindings: QuillBetterTable.keyboardBindings
     }
-  }), [handleYouTubeVideo, handleLink, handleTableInsert]); // --- NEW --- Add handleLink as a dependency
+  }), [handleYouTubeVideo, handleLink]);
 
   const quillFormats = [
     'header', 'bold', 'italic', 'underline', 'strike',
     'list', 'bullet', 'script', 'indent', 'direction',
-    'color', 'background', 'align', 'link', 'image', 'video', 'table',
-    'blockquote', 'code-block'
+    'color', 'background', 'align', 'link', 'image', 'video',
+    'blockquote', 'code-block', 'table', 'table-col', 'table-cell'
   ]
 
   useEffect(() => {
@@ -410,6 +411,18 @@ const AdminBlogPosts: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Content *
                     </label>
+                    <div className="mb-2 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={insertTable}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 text-sm font-medium"
+                      >
+                        Insert Table (3x3)
+                      </button>
+                      <span className="text-xs text-gray-500">
+                        Right-click on table cells to add/remove rows & columns
+                      </span>
+                    </div>
                     <React.Suspense fallback={
                       <div className="w-full h-80 bg-gray-100 rounded-lg flex items-center justify-center">
                         <div className="text-center">
