@@ -284,50 +284,10 @@
 .prose ul, .prose ol {
   margin: 1.25rem 0;
   padding-left: 1.5rem;
-  list-style-position: outside;
-}
-
-.prose ul {
-  list-style-type: disc;
-}
-
-.prose ol {
-  list-style-type: decimal;
-}
-
-.prose ul ul {
-  list-style-type: circle;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-
-.prose ul ul ul {
-  list-style-type: square;
-}
-
-.prose ol ol {
-  list-style-type: lower-alpha;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-
-.prose ol ol ol {
-  list-style-type: lower-roman;
 }
 
 .prose li {
   margin: 0.5rem 0;
-  display: list-item;
-}
-
-.prose li > p {
-  margin: 0;
-}
-
-.prose li > ul,
-.prose li > ol {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 
 .prose blockquote {
@@ -523,48 +483,6 @@
 .ql-toolbar .ql-table {
   width: 28px;
   height: 28px;
-}
-
-/* Better-table module specific styles */
-.ql-better-table {
-  width: 100% !important;
-}
-
-.ql-better-table-wrapper {
-  overflow-x: auto;
-  margin: 1rem 0;
-}
-
-.ql-better-table table {
-  width: 100% !important;
-  border-collapse: collapse;
-  border: 2px solid #e5e7eb;
-}
-
-.ql-better-table td,
-.ql-better-table th {
-  border: 1px solid #e5e7eb !important;
-  padding: 0.5rem !important;
-  min-width: 50px;
-}
-
-.ql-better-table-operation-menu {
-  background: white !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-  border-radius: 0.5rem !important;
-  padding: 0.5rem !important;
-  z-index: 9999 !important;
-}
-
-.ql-better-table-operation-menu-item {
-  padding: 0.5rem !important;
-  cursor: pointer !important;
-  transition: background-color 0.2s !important;
-}
-
-.ql-better-table-operation-menu-item:hover {
-  background-color: #f3f4f6 !important;
 }
 
 /* Enhanced table styling for editor and published posts */
