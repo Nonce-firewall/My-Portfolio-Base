@@ -8,6 +8,7 @@ import ReviewCard from '../components/ReviewCard'
 import TeamMemberCard from '../components/TeamMemberCard'
 import ScrollToTopAndBottomButtons from '../components/ScrollToTopAndBottomButtons'
 import SEOHead from '../components/SEOHead'
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 import { db } from '../lib/supabase'
 import type { Project, Review, SiteSettings, TeamMember } from '../types'
 
@@ -26,10 +27,16 @@ const Home: React.FC<HomeProps> = () => {
   const navigate = useNavigate()
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const videoSectionRef = useRef<HTMLDivElement>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   const explainerVideoUrl = "https://cxhspurcxgcseikfwnpm.supabase.co/storage/v1/object/public/new-images-bucket/projects_20250922_010222897.mp4";
+
+  const aboutSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
+  const videoSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
+  const projectsSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
+  const reviewsSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
+  const teamSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
+  const contactSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -96,7 +103,7 @@ const Home: React.FC<HomeProps> = () => {
       ([entry]) => setIsIntersecting(entry.isIntersecting),
       { threshold: 0.5 }
     );
-    const currentVideoSection = videoSectionRef.current;
+    const currentVideoSection = videoSection.elementRef.current;
     if (currentVideoSection) {
       observer.observe(currentVideoSection);
     }
@@ -105,7 +112,7 @@ const Home: React.FC<HomeProps> = () => {
         observer.unobserve(currentVideoSection);
       }
     };
-  }, []);
+  }, [videoSection.elementRef]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -181,7 +188,15 @@ const Home: React.FC<HomeProps> = () => {
       <TechStack />
       
       {/* About Section */}
-      <section id="about-section" className="py-20 bg-white">
+      <section
+        id="about-section"
+        ref={aboutSection.elementRef}
+        className={`py-20 bg-white transition-all duration-1000 ${
+          aboutSection.isIntersecting
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">About</h2>
@@ -203,32 +218,48 @@ const Home: React.FC<HomeProps> = () => {
       </section>
 
       {/* Explainer Video Section */}
-      <section ref={videoSectionRef} className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
+      <section
+        ref={videoSection.elementRef}
+        className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+          videoSection.isIntersecting
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global✓</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              An affordable website with prompt delivery to help boost your online presence and increase global reach!
-            </p>
-          </div>
-          <div className="max-w-4xl mx-auto">
-            <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-1 ring-gray-800/10">
-              <video
-                ref={videoRef}
-                src={explainerVideoUrl}
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover"
-                preload="metadata"
-              />
+          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12">
+            <div className="lg:w-1/2 text-center lg:text-left mb-12 lg:mb-0">
+              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Get Noticed. Get Global✓</h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                An affordable website with prompt delivery to help boost your online presence and increase global reach!
+              </p>
+            </div>
+            <div className="lg:w-1/2">
+              <div className="aspect-w-16 aspect-h-9 rounded-2xl shadow-1xl overflow-hidden ring-1 ring-gray-800/10">
+                <video
+                  ref={videoRef}
+                  src={explainerVideoUrl}
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Projects */}
-      <section className="py-20 bg-white rounded-3xl ring-2 ring-blue-800/12">
+      <section
+        ref={projectsSection.elementRef}
+        className={`py-20 bg-white rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+          projectsSection.isIntersecting
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Featured Projects</h2>
@@ -263,7 +294,14 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* Reviews Section */}
       {displayReviews && displayReviews.length > 0 && (
-        <section className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
+        <section
+          ref={reviewsSection.elementRef}
+          className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+            reviewsSection.isIntersecting
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-10'
+          }`}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Testimonials</h2>
@@ -319,7 +357,14 @@ const Home: React.FC<HomeProps> = () => {
 
       {/* Team Section */}
       {displayTeamMembers && displayTeamMembers.length > 0 && (
-        <section className="py-20 bg-white rounded-3xl ring-2 ring-blue-800/12">
+        <section
+          ref={teamSection.elementRef}
+          className={`py-20 bg-white rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+            teamSection.isIntersecting
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-10'
+          }`}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Meet The Team</h2>
@@ -372,7 +417,14 @@ const Home: React.FC<HomeProps> = () => {
       )}
 
       {/* Contact Section */}
-      <section className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12">
+      <section
+        ref={contactSection.elementRef}
+        className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+          contactSection.isIntersecting
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-10'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Ready To Launch?</h2>
