@@ -162,16 +162,16 @@ const TableBuilderModal: React.FC<TableBuilderModalProps> = ({ isOpen, onClose, 
         <div className="flex space-x-3 p-6 bg-gray-50 rounded-b-2xl">
           <button
             onClick={onClose}
-            className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200"
+            className="flex-1 px-2 py-1 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200"
           >
             Cancel
           </button>
           <button
             onClick={handleInsert}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2"
+            className="flex-1 px-2 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center justify-center space-x-2"
           >
             <Table size={18} />
-            <span>Insert Table</span>
+            <span>Insert</span>
           </button>
         </div>
       </div>
