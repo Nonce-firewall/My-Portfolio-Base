@@ -107,7 +107,7 @@ The project uses Supabase with the following tables:
 npm run build
 ```
 
-2. Deploy the `dist` folder to your hosting provider
+2. Deploy the `dist` folder to your hosting provider.
 
 ## Contributing
 

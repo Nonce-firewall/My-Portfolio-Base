@@ -21,7 +21,8 @@
     "react-icons": "^5.5.0",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.8.1",
-    "react-syntax-highlighter": "^15.6.5"
+    "react-syntax-highlighter": "^15.6.5",
+    "workbox-window": "^7.3.0"
   },
   "devDependencies": {
     "@types/quill": "^2.0.14",
