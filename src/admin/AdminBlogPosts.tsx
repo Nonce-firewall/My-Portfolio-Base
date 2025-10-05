@@ -70,12 +70,12 @@ const AdminBlogPosts: React.FC = () => {
       if (quill) {
         const range = quill.getSelection(true) || { index: quill.getLength() };
 
-        // Create table HTML with proper structure
-        let tableHTML = '<table class="blog-table"><thead><tr>';
+        // Create table HTML with proper structure and contenteditable
+        let tableHTML = '<table class="blog-table" contenteditable="true" style="border-collapse: collapse; width: 100%; margin: 1rem 0;"><thead><tr>';
 
         // Create header row
         for (let j = 0; j < numCols; j++) {
-          tableHTML += `<th>Header ${j + 1}</th>`;
+          tableHTML += `<th contenteditable="true" style="border: 2px solid #e5e7eb; padding: 12px; background-color: #f8fafc; font-weight: 600; text-align: left;">Header ${j + 1}</th>`;
         }
         tableHTML += '</tr></thead><tbody>';
 
@@ -83,19 +83,25 @@ const AdminBlogPosts: React.FC = () => {
         for (let i = 1; i < numRows; i++) {
           tableHTML += '<tr>';
           for (let j = 0; j < numCols; j++) {
-            tableHTML += `<td>Cell ${i},${j + 1}</td>`;
+            tableHTML += `<td contenteditable="true" style="border: 1px solid #e5e7eb; padding: 12px; background-color: #ffffff;">Cell ${i},${j + 1}</td>`;
           }
           tableHTML += '</tr>';
         }
         tableHTML += '</tbody></table>';
 
+        // Add helpful instruction
+        const instructionHTML = '<p style="color: #3b82f6; font-size: 0.875rem; font-style: italic; margin: 0.5rem 0;">✏️ Click any cell above to edit its content directly</p>';
+
         // Wrap in table shortcode for proper processing
-        const tableShortcode = `\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`;
+        const tableShortcode = `\n${instructionHTML}\n[table rows="${numRows}" cols="${numCols}"]${tableHTML}[/table]\n`;
 
         // Insert the table shortcode
         quill.insertText(range.index, '\n');
         quill.clipboard.dangerouslyPasteHTML(range.index + 1, tableShortcode);
         quill.setSelection(range.index + tableShortcode.length + 2, 0);
+
+        // Show helpful alert
+        alert('✅ Table inserted!\n\n📝 To edit:\n• Click any cell to type\n• Select text to format\n• Use the toolbar for styling\n\nThe table is fully editable - just click and type!');
       }
     } catch (error) {
       console.error('Error inserting table:', error);

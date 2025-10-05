@@ -52,7 +52,7 @@ const ScrollToTopAndBottomButtons: React.FC<ScrollToTopAndBottomButtonsProps> = 
       {/* Scroll to Top Button */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-32 right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 z-40 hover:from-blue-700 hover:to-purple-700 ${
+        className={`fixed bottom-32 right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 z-50 hover:from-blue-700 hover:to-purple-700 ${
           showScrollTop 
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4 pointer-events-none'
@@ -67,7 +67,7 @@ const ScrollToTopAndBottomButtons: React.FC<ScrollToTopAndBottomButtonsProps> = 
       {showScrollDownButton && (
         <button
           onClick={scrollToBottom}
-          className={`fixed bottom-20 right-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 z-40 hover:from-purple-700 hover:to-blue-700 ${
+          className={`fixed bottom-20 right-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 z-50 hover:from-purple-700 hover:to-blue-700 ${
             !showScrollTop && isPageScrollable()
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-4 pointer-events-none'
