@@ -34,8 +34,6 @@ const Home: React.FC<HomeProps> = () => {
   const aboutSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
   const videoSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
   const projectsSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
-  const reviewsSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
-  const teamSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
   const contactSection = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
 
   const handleNavigation = (path: string) => {
@@ -295,12 +293,7 @@ const Home: React.FC<HomeProps> = () => {
       {/* Reviews Section */}
       {displayReviews && displayReviews.length > 0 && (
         <section
-          ref={reviewsSection.elementRef}
-          className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
-            reviewsSection.isIntersecting
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-10'
-          }`}
+          className="py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
@@ -358,12 +351,7 @@ const Home: React.FC<HomeProps> = () => {
       {/* Team Section */}
       {displayTeamMembers && displayTeamMembers.length > 0 && (
         <section
-          ref={teamSection.elementRef}
-          className={`py-20 bg-white rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
-            teamSection.isIntersecting
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-10'
-          }`}
+          className="py-20 bg-white rounded-3xl ring-2 ring-blue-800/12"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
