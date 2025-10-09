@@ -51,8 +51,9 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
     }
   }, [state.succeeded])
 
-  // --- MODIFICATION #2 START ---
-  // The countdown useEffect is updated to call onClose directly.
+  // --- FINAL VERSION ---
+  // This useEffect now calls both resetForm() and onClose()
+  // when the countdown finishes, closing the entire modal.
   useEffect(() => {
     if (!showSuccessModal) return
 
@@ -61,13 +62,12 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
         setCountdown(prev => prev - 1)
       } else if (countdown === 0) {
         resetForm()
-        onClose() // Call onClose here after resetting state.
+        onClose() // This line makes the whole modal disappear
       }
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [countdown, showSuccessModal, onClose]) // Added onClose to dependency array.
-  // --- MODIFICATION #2 END ---
+  }, [countdown, showSuccessModal, onClose]) // Added onClose to dependency array
 
   useEffect(() => {
     if (isOpen || showSuccessModal || showRoleModal || showExperienceModal) {
@@ -81,8 +81,6 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen, showSuccessModal, showRoleModal, showExperienceModal])
 
-  // --- MODIFICATION #1 START ---
-  // The onClose() call is removed from the resetForm function.
   const resetForm = () => {
     setShowSuccessModal(false)
     reset()
@@ -97,9 +95,7 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
     setSelectedRole('')
     setSelectedExperience('')
     setCountdown(5)
-    // The problematic onClose() call has been removed from here.
   }
-  // --- MODIFICATION #1 END ---
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -209,8 +205,6 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div className="space-y-2 sm:space-y-3 animate-slide-up" style={{ animationDelay: '0.6s' }}>
-            {/* --- MODIFICATION #3 START --- */}
-            {/* The onClick handler for the close button is updated. */}
             <button
               onClick={() => {
                 resetForm()
@@ -221,7 +215,6 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
               <RotateCcw size={16} className="mr-2 animate-spin-slow" />
               Close
             </button>
-            {/* --- MODIFICATION #3 END --- */}
           </div>
 
           <div className="mt-4 sm:mt-6 flex justify-center space-x-2">
