@@ -149,7 +149,7 @@ const Blog: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen pt-8 bg-gray-50 animate-fade-in">
+    <div className="min-h-screen pt-8 bg-gray-55 animate-fade-in">
       <SEOHead
         title="Blog - Web Development Insights & Tutorials | Nonce Firewall"
         description="Read the latest articles about web development, React, Next.js, Node.js, and modern technologies. Tips, tutorials, and insights from a full-stack developer with 5+ years experience."
