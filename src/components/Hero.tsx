@@ -42,9 +42,12 @@ const Hero: React.FC<HeroProps> = () => {
   }
 
   return (
-    <section className="min-h-[calc(100vh-64px)] pt-16 flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
+    <section
+      className="min-h-[calc(100vh-64px)] pt-16 flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden"
+      aria-label="Hero section"
+    >
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-grey-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
       </div>
@@ -67,13 +70,15 @@ const Hero: React.FC<HeroProps> = () => {
           <div className="flex flex-row sm:flex-row gap-4 justify-center items-center">
             <button
               onClick={() => navigate('/projects')}
-              className="py-2 px-4 bg-indigo-600 text-white hover:bg-gray-800 transition-all duration-300 rounded-full transform hover:scale-105 active:scale-95 hover:shadow-lg"
+              className="py-2 px-4 bg-indigo-600 text-white hover:bg-gray-800 transition-all duration-300 rounded-full transform hover:scale-105 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              aria-label="View portfolio projects"
             >
               View My Work
             </button>
             <button
               onClick={() => navigate('/contact')}
-              className="py-2 px-4 bg-blue-600 text-white hover:bg-orange-700 hover:text-white transition-all duration-300 rounded-full transform hover:scale-105 active:scale-95 hover:shadow-lg"
+              className="py-2 px-4 bg-blue-600 text-white hover:bg-orange-700 hover:text-white transition-all duration-300 rounded-full transform hover:scale-105 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              aria-label="Navigate to contact page"
             >
               Get In Touch
             </button>
@@ -180,10 +185,11 @@ const Hero: React.FC<HeroProps> = () => {
         {/* Scroll indicator */}
         <button
           onClick={scrollToNext}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-600 hover:text-gray-900 transition-colors duration-300 animate-bounce opacity-0 animate-fade-in"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-gray-600 hover:text-gray-900 transition-colors duration-300 animate-bounce opacity-0 animate-fade-in focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-full p-2"
           style={{ animationDelay: '1.2s', animationFillMode: 'forwards' }}
+          aria-label="Scroll to next section"
         >
-          <ArrowDown size={24} />
+          <ArrowDown size={24} aria-hidden="true" />
         </button>
       </header>
     </section>

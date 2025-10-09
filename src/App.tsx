@@ -28,10 +28,10 @@ const AdminLogin = lazy(() => import('./admin/AdminLogin'))
 
 // Loading component
 const PageLoader = memo(() => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  <div className="min-h-screen flex items-center justify-center bg-gray-50" role="status" aria-live="polite">
     <div className="text-center">
-      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
-      <p className="text-gray-600">Loading...</p>
+      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4" aria-hidden="true"></div>
+      <p className="text-gray-600" aria-label="Loading page content">Loading...</p>
     </div>
   </div>
 )
@@ -114,6 +114,10 @@ function App() {
     <HelmetProvider>
       <AuthProvider>
         <Router>
+          <a href="#main-content" className="skip-to-main">
+            Skip to main content
+          </a>
+
           {/* PWA Components */}
           <PWAInstallPrompt
             isVisible={showInstallPrompt}
@@ -140,7 +144,7 @@ function App() {
             <Route path="/*" element={
               <div className="min-h-[calc(100vh-64px)] bg-white smooth-scroll pt-16">
                 <Navigation />
-                <main className="relative overflow-hidden">
+                <main id="main-content" className="relative overflow-hidden" role="main">
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
                       <Route path="/" element={<Home />} />

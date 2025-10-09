@@ -48,12 +48,16 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   if (imageError) {
     return (
-      <div className={`bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center ${className}`}>
+      <div
+        className={`bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center ${className}`}
+        role="img"
+        aria-label={alt || 'Image unavailable'}
+      >
         <div className="text-center">
-          <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-2 flex items-center justify-center">
+          <div className="w-8 h-8 bg-gray-300 rounded-full mx-auto mb-2 flex items-center justify-center" aria-hidden="true">
             <span className="text-gray-500 text-xs">?</span>
           </div>
-          <span className="text-gray-500 text-xs">Image unavailable</span>
+          <span className="text-gray-500 text-xs sr-only">Image unavailable: {alt}</span>
         </div>
       </div>
     )

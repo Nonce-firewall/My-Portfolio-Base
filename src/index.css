@@ -12,6 +12,16 @@
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', sans-serif;
   }
+
+  *:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  *:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
@@ -871,4 +881,78 @@
 
 .animate-slide-up-modal {
   animation: slideUpFromBottom 0.3s ease-out;
+}
+
+/* WCAG Accessibility Enhancements */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: 1rem 1.5rem;
+  background: #3b82f6;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.skip-to-main:focus {
+  left: 1rem;
+  outline: 3px solid #1e40af;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 0;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .gradient-text {
+    background: none;
+    color: #1e40af;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  button,
+  a {
+    border: 2px solid currentColor;
+  }
 }

@@ -51,7 +51,7 @@ const Footer: React.FC<FooterProps> = () => {
   }
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-900 text-white" role="contentinfo">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
@@ -71,17 +71,17 @@ const Footer: React.FC<FooterProps> = () => {
               Full-stack developer specializing in modern web technologies. 
               Creating exceptional digital experiences with clean code and innovative solutions.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4" role="list" aria-label="Social media links">
               {settings?.github_url && (
                 <a
                   href={settings.github_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition-colors duration-300"
-                  title="GitHub"
+                  className="text-gray-400 hover:text-white transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 rounded p-1"
                   aria-label="Visit Nonce Firewall on GitHub"
                 >
-                  <Github size={24} />
+                  <Github size={24} aria-hidden="true" />
+                  <span className="sr-only">GitHub</span>
                 </a>
               )}
               {settings?.linkedin_url && (
@@ -166,7 +166,8 @@ const Footer: React.FC<FooterProps> = () => {
           {/* Quick Links */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <nav aria-label="Quick links navigation">
+              <ul className="space-y-2">
               {[
                 { path: '/', label: 'home' },
                 { path: '/projects', label: 'projects' },
@@ -178,19 +179,22 @@ const Footer: React.FC<FooterProps> = () => {
                 <li key={item.path}>
                   <button
                     onClick={() => handleNavigation(item.path)}
-                    className="text-gray-400 hover:text-white transition-all duration-300 capitalize transform hover:scale-105 active:scale-95"
+                    className="text-gray-400 hover:text-white transition-all duration-300 capitalize transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 rounded px-2 py-1"
+                    aria-label={`Navigate to ${item.label} page`}
                   >
                     {item.label}
                   </button>
                 </li>
               ))}
-            </ul>
+              </ul>
+            </nav>
           </div>
 
           {/* Products */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Products</h4>
-            <ul className="space-y-2">
+            <nav aria-label="Products navigation">
+              <ul className="space-y-2">
               {products.slice(0, 3).map((product) => (
                 <li key={product.id}>
                   <a
@@ -213,7 +217,8 @@ const Footer: React.FC<FooterProps> = () => {
                   </button>
                 </li>
               )}
-            </ul>
+              </ul>
+            </nav>
           </div>
 
           {/* Newsletter */}
@@ -235,10 +240,11 @@ const Footer: React.FC<FooterProps> = () => {
           href={settings.whatsapp_link}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 z-40 hover:from-blue-700 hover:to-purple-700 animate-bounce"
-          title="WhatsApp"
+          className="fixed bottom-6 right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 z-40 hover:from-blue-700 hover:to-purple-700 animate-bounce focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Contact us on WhatsApp"
         >
-          <MessageCircle size={13} />
+          <MessageCircle size={13} aria-hidden="true" />
+          <span className="sr-only">WhatsApp</span>
         </a>
       )}
     </footer>
