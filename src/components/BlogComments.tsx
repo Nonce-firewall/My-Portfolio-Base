@@ -399,7 +399,7 @@ const BlogComments: React.FC<BlogCommentsProps> = ({ postId }) => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+      <div className="bg-white rounded-xl p-4 sm:p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-5 sm:h-6 bg-gray-200 rounded w-1/4"></div>
           <div className="space-y-3">
