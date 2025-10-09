@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { X, Send, CheckCircle, RotateCcw } from 'lucide-react'
+import { X, Send, CheckCircle } from 'lucide-react'
 import { useForm } from '@formspree/react'
 
 interface JoinTeamModalProps {
