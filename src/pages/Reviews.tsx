@@ -443,8 +443,7 @@ const Reviews: React.FC = () => {
                     {/* Profile Picture Upload */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Profile Picture (Optional) 
-                        <span className="text-xs text-gray-500 ml-1">- Beautiful gradient avatar will be generated if not provided</span>
+                        Profile Picture (Optional)
                       </label>
                       <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
                         {/* Avatar Preview */}
@@ -504,7 +503,7 @@ const Reviews: React.FC = () => {
                                     PNG, JPG up to 5MB • Optional
                                   </p>
                                   <p className="text-xs text-blue-600 mt-0.5 sm:mt-1 font-medium">
-                                    💡 No photo? We'll create a beautiful gradient avatar for you!
+                                    💡 No Upload? Gradient Avatar Will Be Generated!
                                   </p>
                                 </div>
                               )}
@@ -517,7 +516,7 @@ const Reviews: React.FC = () => {
                       {!avatarPreview && formData.client_name && (
                         <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-blue-50 border border-blue-200 rounded-lg">
                           <p className="text-xs text-blue-800 text-center">
-                            <span className="font-medium">Preview:</span> Your review will display with a beautiful gradient avatar featuring your initials "{formData.client_name.slice(0, 2).toUpperCase()}"
+                            <span className="font-medium">Preview:</span> Your review will display with a generated gradient avatar featuring your initials "{formData.client_name.slice(0, 2).toUpperCase()}"
                           </p>
                         </div>
                       )}
