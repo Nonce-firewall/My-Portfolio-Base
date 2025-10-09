@@ -54,16 +54,15 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (!showSuccessModal) return
 
-    if (countdown > 0) {
-      const timer = setTimeout(() => {
+    const timer = setTimeout(() => {
+      if (countdown > 0) {
         setCountdown(prev => prev - 1)
-      }, 1000)
-      return () => clearTimeout(timer)
-    }
+      } else if (countdown === 0) {
+        resetForm()
+      }
+    }, 1000)
 
-    if (countdown === 0) {
-      resetForm()
-    }
+    return () => clearTimeout(timer)
   }, [countdown, showSuccessModal])
 
   useEffect(() => {
