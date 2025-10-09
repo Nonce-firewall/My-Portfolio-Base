@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronRight, ArrowRight, Mail, MessageCircle, Clock } from 'lucide-react'
+import { ChevronRight, ArrowRight, Mail, MessageCircle, Clock, UserPlus } from 'lucide-react'
 import Hero from '../components/Hero'
 import TechStack from '../components/TechStack'
 import ProjectCard from '../components/ProjectCard'
@@ -8,6 +8,7 @@ import ReviewCard from '../components/ReviewCard'
 import TeamMemberCard from '../components/TeamMemberCard'
 import ScrollToTopAndBottomButtons from '../components/ScrollToTopAndBottomButtons'
 import SEOHead from '../components/SEOHead'
+import JoinTeamModal from '../components/JoinTeamModal'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 import { db } from '../lib/supabase'
 import type { Project, Review, SiteSettings, TeamMember } from '../types'
@@ -24,6 +25,7 @@ const Home: React.FC<HomeProps> = () => {
   const [currentTeamIndex, setCurrentTeamIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [isTeamTransitioning, setIsTeamTransitioning] = useState(true)
+  const [isJoinTeamModalOpen, setIsJoinTeamModalOpen] = useState(false)
   const navigate = useNavigate()
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -399,10 +401,25 @@ const Home: React.FC<HomeProps> = () => {
                   />
                 ))}
               </div>
+
+              <div className="text-center mt-8">
+                <button
+                  onClick={() => setIsJoinTeamModalOpen(true)}
+                  className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-xl"
+                >
+                  <UserPlus size={20} className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                  <span>Join Our Team</span>
+                </button>
+              </div>
             </div>
           </div>
         </section>
       )}
+
+      <JoinTeamModal
+        isOpen={isJoinTeamModalOpen}
+        onClose={() => setIsJoinTeamModalOpen(false)}
+      />
 
       {/* Contact Section */}
       <section
