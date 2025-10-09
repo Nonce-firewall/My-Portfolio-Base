@@ -283,7 +283,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center">
             <button
               onClick={() => handleNavigation('/projects')}
-              className="btn-primary py-1 px-2 inline-flex items-center transform hover:scale-105 active:scale-95"
+              className="btn-primary px-3 py-1 inline-flex items-center transform hover:scale-105 active:scale-95"
             >
               Projects
               <ArrowRight size={17} className="ml-2" />
