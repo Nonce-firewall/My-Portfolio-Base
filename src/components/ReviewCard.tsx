@@ -79,10 +79,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, project, variant = 'ful
               <img
                 src={review.avatar_url}
                 alt={`${review.client_name}'s avatar`}
-                className={variant === 'preview' 
+                className={variant === 'preview'
                   ? "w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-full border-2 border-white shadow-md"
                   : "w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-full border-2 sm:border-3 border-white shadow-lg"
                 }
+                loading="lazy"
+                width={variant === 'preview' ? 40 : 48}
+                height={variant === 'preview' ? 40 : 48}
               />
             ) : (
               <div className={`rounded-full flex items-center justify-center text-white font-bold shadow-lg ${getAvatarColor(review.client_name)} ${

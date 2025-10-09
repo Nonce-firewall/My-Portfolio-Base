@@ -7,14 +7,28 @@ export default defineConfig({
     target: 'es2020',
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          ui: ['lucide-react', 'framer-motion'],
-          editor: ['react-quill', 'quill'],
-          supabase: ['@supabase/supabase-js'],
-          forms: ['@formspree/react'],
-          syntax: ['react-syntax-highlighter']
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react'
+            }
+            if (id.includes('react-router')) {
+              return 'vendor-router'
+            }
+            if (id.includes('lucide-react') || id.includes('framer-motion')) {
+              return 'vendor-ui'
+            }
+            if (id.includes('quill') || id.includes('react-quill')) {
+              return 'vendor-editor'
+            }
+            if (id.includes('@supabase')) {
+              return 'vendor-supabase'
+            }
+            if (id.includes('react-syntax-highlighter')) {
+              return 'vendor-syntax'
+            }
+            return 'vendor-other'
+          }
         },
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name?.split('.')
@@ -40,10 +54,15 @@ export default defineConfig({
           drop_console: true,
           drop_debugger: true,
           pure_funcs: ['console.log', 'console.info', 'console.debug'],
-          passes: 2
+          passes: 3,
+          unsafe_arrows: true,
+          unsafe_methods: true
         },
         format: {
           comments: false
+        },
+        mangle: {
+          safari10: true
         }
       }
     }),

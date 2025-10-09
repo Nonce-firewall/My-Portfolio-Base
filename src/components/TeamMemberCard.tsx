@@ -72,6 +72,9 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ teamMember, variant = '
           src={teamMember.profile_picture_url}
           alt={`${teamMember.name} - ${teamMember.role}`}
           className={`w-full h-full object-cover rounded-full shadow-xl ${variant === 'compact' ? 'border-2 sm:border-3' : 'border-4'} border-white`}
+          loading="lazy"
+          width={variant === 'compact' || variant === 'preview' ? 80 : 96}
+          height={variant === 'compact' || variant === 'preview' ? 80 : 96}
         />
         {/* Avatar glow effect */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent"></div>
