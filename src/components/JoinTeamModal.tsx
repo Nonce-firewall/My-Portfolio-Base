@@ -117,7 +117,7 @@ const JoinTeamModal: React.FC<JoinTeamModalProps> = ({ isOpen, onClose }) => {
       {/* This is the main container. It is ALWAYS rendered when the modal is open. */}
       {/* It no longer gets replaced when the success message shows. */}
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[999] p-4 animate-modal-fade-in" onClick={onClose}>
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 ease-out animate-modal-scale-in" onClick={(e) => e.stopPropagation()}>
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] sm:max-h-[90vh] overflow-y-auto transform transition-all duration-300 ease-out animate-modal-scale-in" onClick={(e) => e.stopPropagation()}>
 
           {/* We use a conditional check HERE to swap the CONTENT INSIDE the modal */}
           {showSuccessModal ? (
