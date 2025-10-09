@@ -283,7 +283,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="text-center">
             <button
               onClick={() => handleNavigation('/projects')}
-              className="btn-primary px-3 py-1 inline-flex items-center transform hover:scale-105 active:scale-95"
+              className="btn-primary px-3 py-1 rounded-xl inline-flex items-center transform hover:scale-105 active:scale-95"
             >
               Projects
               <ArrowRight size={17} className="ml-2" />
@@ -338,7 +338,7 @@ const Home: React.FC<HomeProps> = () => {
                 </div>
                 <button
                   onClick={() => handleNavigation('/reviews')}
-                  className="group flex items-center space-x-2 px-1 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-md"
+                  className="group flex items-center space-x-2 px-1 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 text-blue-700 hover:text-blue-800 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 hover:shadow-md"
                   title="View all reviews"
                 >
                   <span className="text-sm font-medium">View All</span>
@@ -482,7 +482,7 @@ const Home: React.FC<HomeProps> = () => {
                     </p>
                     <button
                       onClick={() => handleNavigation('/contact')}
-                      className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg flex items-center justify-center transform hover:scale-105 active:scale-95"
+                      className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg flex items-center justify-center transform hover:scale-105 active:scale-95"
                     >
                       Open Form
                       <ArrowRight size={17} className="ml-2" />
