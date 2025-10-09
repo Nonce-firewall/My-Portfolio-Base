@@ -57,7 +57,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
       aria-label={`View live demo of ${project.title}`}
     >
       <ExternalLink size={14} />
-      <span>Live Site</span>
+      <span>Explore</span>
     </a>
   )}
   {project.github_url && (
