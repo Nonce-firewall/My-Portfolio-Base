@@ -18,7 +18,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, onClick }) => {
   }
 
   return (
-    <article className="bg-white rounded-xl overflow-hidden card-hover cursor-pointer" onClick={onClick}>
+    <article className="bg-white rounded-xl border-1 border-blue-500 overflow-hidden card-hover cursor-pointer" onClick={onClick}>
       {post.featured_image_url && (
         <div className="relative h-48 overflow-hidden">
           <OptimizedImage
