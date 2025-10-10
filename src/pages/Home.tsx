@@ -446,38 +446,38 @@ const Home: React.FC<HomeProps> = () => {
                     <div className="space-y-6">
                       <a
                         href={`mailto:${settings?.email || 'hello@noncefirewall.dev'}`}
-                        className="flex items-center space-x-4 hover:bg-blue-50 rounded-lg p-3 -m-3 transition-all duration-300 group cursor-pointer transform hover:scale-105 hover:shadow-md"
+                        className="flex items-center space-x-4 hover:bg-blue-50 bg-gradient-to-r from-blue-50/30 to-transparent rounded-lg p-3 -m-3 transition-all duration-300 group cursor-pointer transform hover:scale-105 shadow-sm hover:shadow-md border border-blue-100/50 hover:border-blue-200"
                       >
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-all duration-300 group-hover:scale-110">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-all duration-300 group-hover:scale-110 shadow-sm">
                           <Mail className="w-6 h-6 text-blue-500 group-hover:animate-bounce" />
                         </div>
                         <div className="flex-1">
                           <h4 className="font-semibold text-gray-900 flex items-center gap-2">
                             Email
-                            <span className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to send</span>
+                            <span className="text-xs text-blue-600 opacity-60 group-hover:opacity-100 transition-opacity duration-300">Tap to send</span>
                           </h4>
-                          <p className="text-gray-600 group-hover:text-blue-600 transition-colors duration-300 group-hover:underline">{settings?.email || 'hello@noncefirewall.dev'}</p>
+                          <p className="text-blue-600 group-hover:text-blue-700 transition-colors duration-300 underline decoration-blue-300 group-hover:decoration-blue-500 underline-offset-2">{settings?.email || 'hello@noncefirewall.dev'}</p>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-blue-500 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300" />
+                        <ChevronRight className="w-5 h-5 text-blue-500 opacity-50 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300" />
                       </a>
                       {settings?.whatsapp_link && (
                         <a
                           href={settings.whatsapp_link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center space-x-4 hover:bg-green-50 rounded-lg p-3 -m-3 transition-all duration-300 group cursor-pointer transform hover:scale-105 hover:shadow-md"
+                          className="flex items-center space-x-4 hover:bg-green-50 bg-gradient-to-r from-green-50/30 to-transparent rounded-lg p-3 -m-3 transition-all duration-300 group cursor-pointer transform hover:scale-105 shadow-sm hover:shadow-md border border-green-100/50 hover:border-green-200"
                         >
-                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-all duration-300 group-hover:scale-110">
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-all duration-300 group-hover:scale-110 shadow-sm">
                             <MessageCircle className="w-6 h-6 text-green-500 group-hover:animate-bounce" />
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-gray-900 flex items-center gap-2">
                               WhatsApp
-                              <span className="text-xs text-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to chat</span>
+                              <span className="text-xs text-green-600 opacity-60 group-hover:opacity-100 transition-opacity duration-300">Tap to chat</span>
                             </h4>
-                            <p className="text-gray-600 group-hover:text-green-600 transition-colors duration-300 group-hover:underline">Available for quick chats</p>
+                            <p className="text-green-600 group-hover:text-green-700 transition-colors duration-300 underline decoration-green-300 group-hover:decoration-green-500 underline-offset-2">Available for quick chats</p>
                           </div>
-                          <ChevronRight className="w-5 h-5 text-green-500 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300" />
+                          <ChevronRight className="w-5 h-5 text-green-500 opacity-50 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300" />
                         </a>
                       )}
                       <div className="flex items-center space-x-4">
