@@ -27,23 +27,17 @@ const logos: TechLogo[] = [
 
 const TechStack: React.FC = () => {
   return (
-    // 1. The main section is now a positioning container.
-    //    The blur and background styles have been removed from here.
     <section className="relative py-12 -mt-16 sm:-mt-20 md:-mt-24">
-      
-      {/* 2. This new div acts as the blurred background layer. */}
-      {/* It's positioned absolutely to fill the parent section. */}
       <div
-        className="absolute inset-0 bg-purple-200 blur-xl"
+        className="absolute inset-0 bg-purple-200 opacity-40"
+        style={{ filter: 'blur(60px)' }}
         aria-hidden="true"
       />
 
-      {/* 3. This div holds the content and uses z-10 to sit on top. */}
-      {/* It is not affected by the blur. */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <TechStackMarquee logos={logos} speed="normal" />
       </div>
-      
+
     </section>
   )
 }

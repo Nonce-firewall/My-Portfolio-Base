@@ -187,14 +187,13 @@ const Home: React.FC<HomeProps> = () => {
       <Hero />
       <TechStack />
       
-      {/* About Section */}
       <section
         id="about-section"
         ref={aboutSection.elementRef}
-        className={`py-20 bg-white transition-all duration-1000 ${
+        className={`py-20 bg-white transition-opacity duration-1000 ${
           aboutSection.isIntersecting
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-10'
+            ? 'opacity-100'
+            : 'opacity-0'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -217,13 +216,12 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </section>
 
-      {/* Explainer Video Section */}
       <section
         ref={videoSection.elementRef}
-        className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+        className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-opacity duration-1000 ${
           videoSection.isIntersecting
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-10'
+            ? 'opacity-100'
+            : 'opacity-0'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -243,7 +241,8 @@ const Home: React.FC<HomeProps> = () => {
                   loop
                   playsInline
                   className="w-full h-full object-cover"
-                  preload="metadata"
+                  preload="none"
+                  poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'%3E%3Crect fill='%23fdf4ff' width='16' height='9'/%3E%3C/svg%3E"
                 />
               </div>
             </div>
@@ -251,13 +250,12 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </section>
 
-      {/* Featured Projects */}
       <section
         ref={projectsSection.elementRef}
-        className={`py-20 bg-white rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+        className={`py-20 bg-white rounded-3xl ring-2 ring-blue-800/12 transition-opacity duration-1000 ${
           projectsSection.isIntersecting
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-10'
+            ? 'opacity-100'
+            : 'opacity-0'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -421,13 +419,12 @@ const Home: React.FC<HomeProps> = () => {
         onClose={() => setIsJoinTeamModalOpen(false)}
       />
 
-      {/* Contact Section */}
       <section
         ref={contactSection.elementRef}
-        className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-all duration-1000 ${
+        className={`py-20 bg-fuchsia-50 rounded-3xl ring-2 ring-blue-800/12 transition-opacity duration-1000 ${
           contactSection.isIntersecting
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-10'
+            ? 'opacity-100'
+            : 'opacity-0'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

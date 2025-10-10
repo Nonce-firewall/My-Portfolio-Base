@@ -32,23 +32,20 @@ const TechStackMarquee: React.FC<TechStackMarqueeProps> = ({
   }
 
   return (
-    <div className="w-full overflow-hidden bg-white/50 backdrop-blur-sm rounded-2xl border border-white/20 py-6">
+    <div className="w-full overflow-hidden bg-white/50 backdrop-blur-sm rounded-2xl border border-white/20 py-6 will-change-transform">
       <div className="relative">
-        {/* Gradient overlays for fade effect */}
         <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white/80 to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white/80 to-transparent z-10 pointer-events-none"></div>
-        
-        {/* Marquee container: Now uses inline-flex and flex-nowrap */}
+
         <div className="inline-flex flex-nowrap space-x-8">
           {/* First set of logos */}
-          <div className={`flex items-center space-x-8 ${getAnimationClass()}`}>
+          <div className={`flex items-center space-x-8 ${getAnimationClass()}`} style={{ willChange: 'transform' }}>
             {logos.map((logo, index) => (
               <div
                 key={`${logo.name}-first-${index}`}
                 className="flex-shrink-0 group"
               >
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-110 hover:-translate-y-1">
-                  {/* Subtle glow effect on hover */}
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-110 hover:-translate-y-1" style={{ willChange: 'transform' }}>
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
                   <OptimizedImage
@@ -70,15 +67,13 @@ const TechStackMarquee: React.FC<TechStackMarqueeProps> = ({
             ))}
           </div>
 
-          {/* Second, duplicated set of logos (aria-hidden for accessibility) */}
-          <div className={`flex items-center space-x-8 ${getAnimationClass()}`} aria-hidden="true">
+          <div className={`flex items-center space-x-8 ${getAnimationClass()}`} aria-hidden="true" style={{ willChange: 'transform' }}>
             {logos.map((logo, index) => (
               <div
                 key={`${logo.name}-second-${index}`}
                 className="flex-shrink-0 group"
               >
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-110 hover:-translate-y-1">
-                  {/* Subtle glow effect on hover */}
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-110 hover:-translate-y-1" style={{ willChange: 'transform' }}>
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
                   <OptimizedImage
