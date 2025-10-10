@@ -23,7 +23,7 @@ const STORAGE_KEYS = {
   LAST_VERSION: 'pwa-last-version'
 }
 
-const CURRENT_VERSION = '3.0.0'
+const CURRENT_VERSION = '3.0.1'
 
 export const usePWA = () => {
   const [pwaState, setPwaState] = useState<PWAState>({
@@ -73,8 +73,7 @@ export const usePWA = () => {
       setPwaState(prev => ({
         ...prev,
         isInstallable: true,
-        installPrompt: installEvent,
-        showInstallPrompt: false
+        installPrompt: installEvent
       }))
 
       if (!isInstalled && !isDismissed && !isAdminPage) {
@@ -83,7 +82,7 @@ export const usePWA = () => {
             ...prev,
             showInstallPrompt: true
           }))
-        }, isFirstVisit ? 15000 : 30000)
+        }, isFirstVisit ? 3000 : 5000)
       }
     }
 
@@ -110,7 +109,7 @@ export const usePWA = () => {
       window.removeEventListener('online', updateOnlineStatus)
       window.removeEventListener('offline', updateOnlineStatus)
     }
-  }, [])
+  }, [checkInstalled, checkIfFirstVisit])
 
   const installApp = useCallback(async () => {
     if (!pwaState.installPrompt) {

@@ -3,7 +3,7 @@
 export const registerSW = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      if (window.location.hostname === 'localhost' || window.location.hostname.includes('webcontainer')) {
+      if (window.location.hostname === 'localhost' || window.location.hostname.includes('webcontainer') || window.location.hostname.includes('127.0.0.1')) {
         console.log('Service worker registration skipped in development environment')
         return
       }
@@ -24,7 +24,9 @@ export const registerSW = async () => {
             if (newWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 console.log('New service worker installed, update available')
-                window.dispatchEvent(new CustomEvent('sw-update-available'))
+                window.dispatchEvent(new CustomEvent('sw-update-available', {
+                  detail: { isUpdate: true }
+                }))
               } else {
                 console.log('Service worker installed for the first time')
               }
@@ -34,12 +36,14 @@ export const registerSW = async () => {
       })
 
       if (registration.waiting) {
-        window.dispatchEvent(new CustomEvent('sw-update-available'))
+        window.dispatchEvent(new CustomEvent('sw-update-available', {
+          detail: { isUpdate: true }
+        }))
       }
 
       setInterval(() => {
         registration.update()
-      }, 60000)
+      }, 30000)
 
     } catch (error) {
       console.error('Service worker registration failed:', error)

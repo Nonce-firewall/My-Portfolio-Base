@@ -41,7 +41,6 @@ function App() {
   const {
     showInstallPrompt,
     isOffline,
-    isInstalled,
     installApp,
     dismissInstallPrompt
   } = usePWA()
@@ -49,21 +48,27 @@ function App() {
   const [showUpdatePrompt, setShowUpdatePrompt] = React.useState(false)
 
   React.useEffect(() => {
-    if ('serviceWorker' in navigator && isInstalled) {
+    if ('serviceWorker' in navigator) {
       const handleUpdate = () => {
-        const lastVersion = localStorage.getItem('pwa-last-version')
-        const currentVersion = '3.0.0'
+        setShowUpdatePrompt(true)
+      }
 
-        if (lastVersion && lastVersion !== currentVersion) {
+      const handleSWUpdate = (event: Event) => {
+        const customEvent = event as CustomEvent
+        if (customEvent.detail?.isUpdate) {
           setShowUpdatePrompt(true)
-          localStorage.setItem('pwa-last-version', currentVersion)
         }
       }
 
+      window.addEventListener('sw-update-available', handleSWUpdate)
       navigator.serviceWorker.addEventListener('controllerchange', handleUpdate)
 
       navigator.serviceWorker.getRegistration().then(registration => {
         if (registration) {
+          if (registration.waiting) {
+            setShowUpdatePrompt(true)
+          }
+
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing
             if (newWorker) {
@@ -77,18 +82,29 @@ function App() {
 
           setInterval(() => {
             registration.update()
-          }, 60000)
+          }, 30000)
         }
       })
 
       return () => {
+        window.removeEventListener('sw-update-available', handleSWUpdate)
         navigator.serviceWorker.removeEventListener('controllerchange', handleUpdate)
       }
     }
-  }, [isInstalled])
+  }, [])
 
-  const handleUpdate = () => {
-    window.location.reload()
+  const handleUpdate = async () => {
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration()
+      if (registration?.waiting) {
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+        window.location.reload()
+      } else {
+        window.location.reload()
+      }
+    } else {
+      window.location.reload()
+    }
   }
   
   // Preload admin components when user is authenticated

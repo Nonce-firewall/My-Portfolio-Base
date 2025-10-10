@@ -1,4 +1,4 @@
-const CACHE_VERSION = '3.0.0'
+const CACHE_VERSION = '3.0.1'
 const CACHE_NAME = `nonce-firewall-v${CACHE_VERSION}`
 const STATIC_CACHE = `static-v${CACHE_VERSION}`
 const DYNAMIC_CACHE = `dynamic-v${CACHE_VERSION}`
@@ -80,6 +80,11 @@ self.addEventListener('activate', (event) => {
   )
 })
 
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
+})
 // Fetch event - implement caching strategies
 self.addEventListener('fetch', (event) => {
   const { request } = event
