@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mail, Phone, MapPin, Send, CheckCircle, RotateCcw, X } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, CheckCircle, RotateCcw, X, ChevronRight, MessageCircle } from 'lucide-react'
 import { useForm } from '@formspree/react'
 import ScrollToTopAndBottomButtons from '../components/ScrollToTopAndBottomButtons'
 import { createPortal } from 'react-dom'
+import { db } from '../lib/supabase'
+import type { SiteSettings } from '../types'
 
 // --- MODIFICATION START ---
 
@@ -133,14 +135,15 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ countdown, resetForm, handl
 const Contact: React.FC = () => {
   const [state, handleSubmit, reset] = useForm("mldbqpgy")
   const navigate = useNavigate()
-  
+  const [settings, setSettings] = useState<SiteSettings | null>(null)
+
   const handleNavigation = (path: string) => {
     navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const [showTimelineModal, setShowTimelineModal] = useState(false)
-  const [showTypeModal, setShowTypeModal] = useState(false) 
+  const [showTypeModal, setShowTypeModal] = useState(false)
   const [selectedTimeline, setSelectedTimeline] = useState('')
   const [selectedType, setSelectedType] = useState('')
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -154,6 +157,14 @@ const Contact: React.FC = () => {
     subject: '',
     message: ''
   })
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const settingsResult = await db.getSiteSettings()
+      if (settingsResult.data) setSettings(settingsResult.data)
+    }
+    fetchSettings()
+  }, [])
 
   // handlers
   const handleTimelineSelect = (option: string) => {
@@ -322,26 +333,54 @@ const Contact: React.FC = () => {
             <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Let's Connect</h2>
               <div className="space-y-4 sm:space-y-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" />
+                <a
+                  href={`mailto:${settings?.email || 'build@noncefirewall.tech'}`}
+                  className="flex items-center space-x-4 hover:bg-blue-50 bg-gradient-to-r from-blue-50/30 to-transparent rounded-lg p-3 -m-3 transition-all duration-300 group cursor-pointer transform hover:scale-105 shadow-sm hover:shadow-md border border-blue-100/50 hover:border-blue-200"
+                >
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-all duration-300 group-hover:scale-110 shadow-sm">
+                    <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 group-hover:animate-bounce" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Email</h3>
-                    <p className="text-gray-600 text-sm sm:text-base">build@noncefirewall.tech</p>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base flex items-center gap-2">
+                      Email
+                      <span className="text-xs text-blue-600 opacity-60 group-hover:opacity-100 transition-opacity duration-300">Tap to send</span>
+                    </h3>
+                    <p className="text-blue-600 group-hover:text-blue-700 transition-colors duration-300 underline decoration-blue-300 group-hover:decoration-blue-500 underline-offset-2 text-sm sm:text-base">{settings?.email || 'build@noncefirewall.tech'}</p>
                   </div>
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />
+                  <ChevronRight className="w-5 h-5 text-blue-500 opacity-50 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300" />
+                </a>
+
+                {settings?.whatsapp_link ? (
+                  <a
+                    href={settings.whatsapp_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-4 hover:bg-green-50 bg-gradient-to-r from-green-50/30 to-transparent rounded-lg p-3 -m-3 transition-all duration-300 group cursor-pointer transform hover:scale-105 shadow-sm hover:shadow-md border border-green-100/50 hover:border-green-200"
+                  >
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-all duration-300 group-hover:scale-110 shadow-sm">
+                      <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 group-hover:animate-bounce" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base flex items-center gap-2">
+                        WhatsApp
+                        <span className="text-xs text-green-600 opacity-60 group-hover:opacity-100 transition-opacity duration-300">Tap to chat</span>
+                      </h3>
+                      <p className="text-green-600 group-hover:text-green-700 transition-colors duration-300 underline decoration-green-300 group-hover:decoration-green-500 underline-offset-2 text-sm sm:text-base">Available for quick chats</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-green-500 opacity-50 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all duration-300" />
+                  </a>
+                ) : (
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-green-500" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Phone</h3>
+                      <p className="text-gray-600 text-sm sm:text-base">Available via WhatsApp</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Phone</h3>
-                    <p className="text-gray-600 text-sm sm:text-base">Available via WhatsApp</p>
-                  </div>
-                </div>
-                
+                )}
+
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-full flex items-center justify-center">
                     <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-purple-500" />
