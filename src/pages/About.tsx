@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Code } from 'lucide-react'
+import { Code, ArrowRight, Quote } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import AnimatedStats from '../components/AnimatedStats'
 import AnimatedSkillBar from '../components/AnimatedSkillBar'
 import ScrollToTopAndBottomButtons from '../components/ScrollToTopAndBottomButtons'
+import TeamMemberCard from '../components/TeamMemberCard'
+import ReviewCard from '../components/ReviewCard'
+import BlogCard from '../components/BlogCard'
 import { db, subscribeToTable, unsubscribeFromTable } from '../lib/supabase'
-import type { Skill, SiteSettings } from '../types'
+import type { Skill, SiteSettings, TeamMember, Review, BlogPost, Project } from '../types'
 
 const About: React.FC = () => {
   const [skills, setSkills] = useState<Skill[]>([])
   const [settings, setSettings] = useState<SiteSettings | null>(null)
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   // Set page title for SEO
   useEffect(() => {
@@ -44,31 +53,42 @@ const About: React.FC = () => {
 
   const fetchData = async () => {
     setLoading(true)
-    const [skillsResult, settingsResult] = await Promise.all([
+    const [skillsResult, settingsResult, teamMembersResult, reviewsResult, blogPostsResult, projectsResult] = await Promise.all([
       db.getSkills(),
-      db.getSiteSettings()
+      db.getSiteSettings(),
+      db.getTeamMembers(true),
+      db.getReviews(true, 3),
+      db.getBlogPosts(true, 3),
+      db.getProjects()
     ])
-    
+
     if (skillsResult.data) setSkills(skillsResult.data)
     if (settingsResult.data) setSettings(settingsResult.data)
+    if (teamMembersResult.data) setTeamMembers(teamMembersResult.data)
+    if (reviewsResult.data) setReviews(reviewsResult.data)
+    if (blogPostsResult.data) setBlogPosts(blogPostsResult.data)
+    if (projectsResult.data) setProjects(projectsResult.data)
     setLoading(false)
   }
 
   useEffect(() => {
     fetchData()
-    
+
     // Subscribe to real-time changes
-    subscribeToTable('skills', () => {
-      fetchData()
-    })
-    
-    subscribeToTable('site_settings', () => {
-      fetchData()
-    })
-    
+    subscribeToTable('skills', fetchData)
+    subscribeToTable('site_settings', fetchData)
+    subscribeToTable('team_members', fetchData)
+    subscribeToTable('reviews', fetchData)
+    subscribeToTable('blog_posts', fetchData)
+    subscribeToTable('projects', fetchData)
+
     return () => {
       unsubscribeFromTable('skills')
       unsubscribeFromTable('site_settings')
+      unsubscribeFromTable('team_members')
+      unsubscribeFromTable('reviews')
+      unsubscribeFromTable('blog_posts')
+      unsubscribeFromTable('projects')
     }
   }, [])
 
@@ -239,7 +259,7 @@ const About: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900">Full-Stack Developer</h3>
                 <p className="text-blue-600 font-medium">2025 - Present</p>
                 <p className="text-gray-600 mt-2">
-                  Developing modern web applications using React, Node.js, and cloud technologies. 
+                  Developing modern web applications using React, Node.js, and cloud technologies.
                   Focus on creating scalable solutions and exceptional user experiences.
                 </p>
               </div>
@@ -251,7 +271,7 @@ const About: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900">Front-End Developer</h3>
                 <p className="text-green-600 font-medium">2022 - 2024</p>
                 <p className="text-gray-600 mt-2">
-                  Specialized in creating responsive, interactive user interfaces using modern 
+                  Specialized in creating responsive, interactive user interfaces using modern
                   JavaScript frameworks and CSS technologies.
                 </p>
               </div>
@@ -263,13 +283,111 @@ const About: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900">Web Developer</h3>
                 <p className="text-purple-600 font-medium">2021 - 2022</p>
                 <p className="text-gray-600 mt-2">
-                  Started my journey in web development, learning the fundamentals and 
+                  Started my journey in web development, learning the fundamentals and
                   building my first projects with HTML, CSS, and JavaScript.
                 </p>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Team Section */}
+        {teamMembers.length > 0 && (
+          <div className="mt-16 animate-slide-up" style={{ animationDelay: '0.8s' }}>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Meet The Team</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Talented individuals working together to deliver exceptional results. Our team combines diverse skills and expertise to bring your vision to life.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {teamMembers.slice(0, 6).map((member) => (
+                <React.Suspense key={member.id} fallback={
+                  <div className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
+                    <div className="w-20 h-20 bg-gray-200 rounded-full mx-auto mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/3 mx-auto"></div>
+                  </div>
+                }>
+                  <TeamMemberCard teamMember={member} variant="full" />
+                </React.Suspense>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Testimonials Section */}
+        {reviews.length > 0 && (
+          <div className="mt-16 animate-slide-up" style={{ animationDelay: '1s' }}>
+            <div className="text-center mb-12">
+              <div className="inline-block mb-4">
+                <Quote className="w-12 h-12 text-blue-500" />
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Client Testimonials</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Don't just take my word for it. Here's what clients have to say about working with me.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+              {reviews.map((review) => (
+                <ReviewCard
+                  key={review.id}
+                  review={review}
+                  variant="full"
+                  project={review.project_id ? projects.find(p => p.id === review.project_id) : undefined}
+                />
+              ))}
+            </div>
+            <div className="text-center">
+              <button
+                onClick={() => {
+                  navigate('/reviews')
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+                className="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg transform hover:scale-105 active:scale-95"
+              >
+                View All Testimonials
+                <ArrowRight size={17} className="ml-2" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Latest Blog Posts Section */}
+        {blogPosts.length > 0 && (
+          <div className="mt-16 mb-8 animate-slide-up" style={{ animationDelay: '1.2s' }}>
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-6">Latest Insights</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Thoughts, tutorials, and insights on web development, technology, and best practices.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+              {blogPosts.map((post) => (
+                <BlogCard
+                  key={post.id}
+                  post={post}
+                  onClick={() => {
+                    navigate(`/blog/${post.slug}`)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                />
+              ))}
+            </div>
+            <div className="text-center">
+              <button
+                onClick={() => {
+                  navigate('/blog')
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+                className="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg transform hover:scale-105 active:scale-95"
+              >
+                Read More Articles
+                <ArrowRight size={17} className="ml-2" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
