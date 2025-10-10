@@ -444,24 +444,34 @@ const Home: React.FC<HomeProps> = () => {
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-6">Let's Connect</h3>
                     <div className="space-y-6">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <a
+                        href={`mailto:${settings?.email || 'hello@noncefirewall.dev'}`}
+                        className="flex items-center space-x-4 hover:bg-blue-50 rounded-lg p-3 -m-3 transition-all duration-300 group"
+                      >
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors duration-300">
                           <Mail className="w-6 h-6 text-blue-500" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">Email</h4>
-                          <p className="text-gray-600">{settings?.email || 'hello@noncefirewall.dev'}</p>
+                          <p className="text-gray-600 group-hover:text-blue-600 transition-colors duration-300">{settings?.email || 'hello@noncefirewall.dev'}</p>
                         </div>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                          <MessageCircle className="w-6 h-6 text-green-500" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">WhatsApp</h4>
-                          <p className="text-gray-600">Available for quick chats</p>
-                        </div>
-                      </div>
+                      </a>
+                      {settings?.whatsapp_link && (
+                        <a
+                          href={settings.whatsapp_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center space-x-4 hover:bg-green-50 rounded-lg p-3 -m-3 transition-all duration-300 group"
+                        >
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                            <MessageCircle className="w-6 h-6 text-green-500" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">WhatsApp</h4>
+                            <p className="text-gray-600 group-hover:text-green-600 transition-colors duration-300">Available for quick chats</p>
+                          </div>
+                        </a>
+                      )}
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                           <Clock className="w-6 h-6 text-purple-500" />
