@@ -46,10 +46,9 @@ const Hero: React.FC<HeroProps> = () => {
       className="min-h-[calc(100vh-64px)] pt-16 flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden"
       aria-label="Hero section"
     >
-      {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-grey-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 will-change-transform"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-grey-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 will-change-transform"></div>
       </div>
 
       <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">

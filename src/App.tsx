@@ -107,22 +107,21 @@ function App() {
     }
   }
   
-  // Preload admin components when user is authenticated
   React.useEffect(() => {
-    const checkAuthAndPreload = async () => {
-      const { data: { session } } = await import('./lib/supabase').then(m => m.supabase.auth.getSession())
-      if (session?.user) {
-        // Preload admin components for faster navigation
-        import('./utils/lazyComponents').then(({ preloadAdminComponents }) => {
-          preloadAdminComponents()
-        })
-        // Preload admin routes
-        import('./utils/pwa').then(({ preloadAdminRoutes }) => {
-          preloadAdminRoutes()
-        })
+    const checkAuthAndPreload = () => {
+      const hasAuth = localStorage.getItem('supabase.auth.token')
+      if (hasAuth) {
+        setTimeout(() => {
+          import('./utils/lazyComponents').then(({ preloadAdminComponents }) => {
+            preloadAdminComponents()
+          })
+          import('./utils/pwa').then(({ preloadAdminRoutes }) => {
+            preloadAdminRoutes()
+          })
+        }, 2000)
       }
     }
-    
+
     checkAuthAndPreload()
   }, [])
 

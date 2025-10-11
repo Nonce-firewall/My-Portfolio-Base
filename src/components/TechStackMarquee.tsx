@@ -32,29 +32,28 @@ const TechStackMarquee: React.FC<TechStackMarqueeProps> = ({
   }
 
   return (
-    <div className="w-full overflow-hidden bg-white/50 backdrop-blur-sm rounded-2xl border border-white/20 py-6 will-change-transform">
+    <div className="w-full overflow-hidden bg-white/50 backdrop-blur-sm rounded-2xl border border-white/20 py-6">
       <div className="relative">
         <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white/80 to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white/80 to-transparent z-10 pointer-events-none"></div>
 
         <div className="inline-flex flex-nowrap space-x-8">
-          {/* First set of logos */}
-          <div className={`flex items-center space-x-8 ${getAnimationClass()}`} style={{ willChange: 'transform' }}>
+          <div className={`flex items-center space-x-8 ${getAnimationClass()}`}>
             {logos.map((logo, index) => (
               <div
                 key={`${logo.name}-first-${index}`}
                 className="flex-shrink-0 group"
               >
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-110 hover:-translate-y-1" style={{ willChange: 'transform' }}>
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-transform duration-300 hover:shadow-xl hover:scale-105">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
+
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain transition-transform duration-300 group-hover:scale-110"
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain"
                     width={56}
                     height={56}
-                    loading="lazy"
+                    loading="eager"
                   />
                   
                   {/* Tooltip */}
@@ -67,22 +66,22 @@ const TechStackMarquee: React.FC<TechStackMarqueeProps> = ({
             ))}
           </div>
 
-          <div className={`flex items-center space-x-8 ${getAnimationClass()}`} aria-hidden="true" style={{ willChange: 'transform' }}>
+          <div className={`flex items-center space-x-8 ${getAnimationClass()}`} aria-hidden="true">
             {logos.map((logo, index) => (
               <div
                 key={`${logo.name}-second-${index}`}
                 className="flex-shrink-0 group"
               >
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-all duration-300 hover:shadow-xl hover:scale-110 hover:-translate-y-1" style={{ willChange: 'transform' }}>
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center transition-transform duration-300 hover:shadow-xl hover:scale-105">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
+
                   <OptimizedImage
                     src={logo.src}
                     alt={logo.alt}
-                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain transition-transform duration-300 group-hover:scale-110"
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain"
                     width={56}
                     height={56}
-                    loading="lazy"
+                    loading="eager"
                   />
                   
                   {/* Tooltip */}

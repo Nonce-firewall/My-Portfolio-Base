@@ -9,14 +9,17 @@ export default defineConfig({
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
+            if (id.includes('react/') || id.includes('react-dom/')) {
               return 'vendor-react'
             }
             if (id.includes('react-router')) {
               return 'vendor-router'
             }
-            if (id.includes('lucide-react') || id.includes('framer-motion')) {
-              return 'vendor-ui'
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion'
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons'
             }
             if (id.includes('quill') || id.includes('react-quill')) {
               return 'vendor-editor'
@@ -27,7 +30,15 @@ export default defineConfig({
             if (id.includes('react-syntax-highlighter')) {
               return 'vendor-syntax'
             }
-            return 'vendor-other'
+            if (id.includes('react-helmet')) {
+              return 'vendor-helmet'
+            }
+            if (id.includes('@formspree')) {
+              return 'vendor-formspree'
+            }
+            if (id.includes('workbox')) {
+              return 'vendor-workbox'
+            }
           }
         },
         assetFileNames: (assetInfo) => {
@@ -47,31 +58,32 @@ export default defineConfig({
     cssCodeSplit: true,
     sourcemap: false,
     minify: 'terser',
-    chunkSizeWarningLimit: 1000,
-    ...(process.env.NODE_ENV === 'production' && {
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ['console.log', 'console.info', 'console.debug'],
-          passes: 3,
-          unsafe_arrows: true,
-          unsafe_methods: true
-        },
-        format: {
-          comments: false
-        },
-        mangle: {
-          safari10: true
-        }
+    chunkSizeWarningLimit: 500,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
+        passes: 2,
+        dead_code: true,
+        unused: true,
+        toplevel: true,
+        module: true
+      },
+      format: {
+        comments: false
+      },
+      mangle: {
+        safari10: true,
+        toplevel: true
       }
-    }),
-    assetsInlineLimit: 4096,
+    },
+    assetsInlineLimit: 2048,
     reportCompressedSize: true
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', '@supabase/postgrest-js'],
-    exclude: ['@supabase/supabase-js']
+    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: []
   },
   server: {
     hmr: {
